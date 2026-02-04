@@ -1,0 +1,76 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 24px;
+  margin-bottom: 64px;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+
+  .pageItem:first-child {
+    margin-right: 8px;
+  }
+
+  .pageItem:last-child {
+    margin-left: 8px;
+  }
+
+  @include tablet {
+    margin-top: 40px;
+    margin-bottom: 64px;
+  }
+
+  @include desktop {
+    margin-top: 40px;
+    margin-bottom: 80px;
+  }
+}
+
+.pageItem {
+  min-width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pageLink {
+  width: 100%;
+  height: 100%;
+  padding: 0 8px;
+  border: 1px solid $light-grey-color;
+
+  cursor: pointer;
+
+  font-size: 14px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: $dark-grey-color;
+  }
+}
+
+.active {
+  .pageLink {
+    background-color: $dark-grey-color;
+    color: $white-color;
+    border-color: $dark-grey-color;
+  }
+}
+
+.disabled {
+  .pageLink {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}

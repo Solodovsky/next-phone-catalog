@@ -1,0 +1,18 @@
+@use './styles/variables' as *;
+@use './styles/mixins' as *;
+
+.page {
+  overflow-x: hidden;
+}
+
+.homeTitle {
+  margin: 24px 0;
+
+  @include tablet {
+    margin: 32px 0;
+  }
+
+  @include desktop {
+    margin: 56px 0;
+  }
+}

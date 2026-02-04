@@ -28,7 +28,13 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
-    "**/*.mts"
+    "**/*.mts",
+    "src/app/api/accessories/route.js",
+    "src/app/api/tablets/route.js",
+    "src/app/api/phones/[id]/route.js",
+    "src/app/api/phones/route.js",
+    "src/app/api/products/route.js",
+    "src/app/api/products/[id]/route.js"
   ],
   "exclude": ["node_modules"]
 }

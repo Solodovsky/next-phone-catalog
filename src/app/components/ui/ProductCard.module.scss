@@ -1,0 +1,153 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.productCard {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  justify-content: flex-start;
+  background: $white-color;
+  padding: 32px;
+  gap: 8px;
+  border: 1px solid $light-grey-color;
+  width: 100%;
+  height: 439px;
+
+  @include tablet {
+    width: 100%;
+    height: 512px;
+  }
+
+  @include desktop {
+    width: 272px;
+    height: 506px;
+  }
+}
+
+.imageContainer {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.image {
+  max-width: 90%;
+  max-height: 90%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+  transform-origin: center center;
+}
+
+.imageContainer:hover .image {
+  transform: scale(1.1);
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.name {
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $dark-grey-color;
+  height: 42px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.price {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid $light-grey-color;
+  font-weight: $font-weight-bold;
+  font-size: 22px;
+}
+
+.priceDiscount {
+  color: $dark-grey-color;
+}
+
+.priceRegular {
+  color: $gray-color;
+  text-decoration: line-through;
+}
+
+.specs {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 8px;
+  font-weight: $font-weight-bold;
+  font-size: $font-size-12;
+}
+
+.spec {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 8px;
+}
+
+.specLabel {
+  color: $gray-color;
+  flex-shrink: 0;
+}
+
+.specValue {
+  color: $dark-grey-color;
+  text-align: right;
+  word-break: break-word;
+  overflow-wrap: break-word;
+}
+
+.actions {
+  @include flex-center;
+  gap: 8px;
+}
+
+.favoriteButton {
+  background: $white-color;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  min-width: 40px;
+  height: 40px;
+  border: 1px solid $light-grey-color;
+
+  &:hover {
+    border: 1px solid $gray-color;
+  }
+}
+
+.favoriteIcon {
+  width: 40px;
+  height: 40px;
+  transition: all 0.3s ease;
+  display: block;
+}
+
+.loading,
+.error {
+  @include flex-center;
+  padding: 40px;
+  text-align: center;
+  color: $gray-color;
+}
+
+.error {
+  color: #dc3545;
+}

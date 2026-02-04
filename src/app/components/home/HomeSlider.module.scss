@@ -1,0 +1,146 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.Slider {
+  position: relative;
+  padding: 56px 0;
+
+  display: flex;
+  flex-direction: column;
+
+  @include tablet {
+    padding: 64px 0;
+  }
+
+  @include desktop {
+    padding: 80px 0px;
+  }
+}
+
+.slick div {
+  display: flex;
+  gap: 16px;
+}
+
+.slick div::before {
+  display: none;
+}
+
+:global(.slick-slider) {
+  @include tablet {
+    margin-right: -24px;
+  }
+
+  @include mobile {
+    margin-right: -16px;
+  }
+}
+
+.sliderHeader {
+  padding-bottom: 24px;
+  width: 136px;
+
+  @include tablet {
+    width: 100%;
+  }
+
+  @include desktop {
+    width: 100%;
+  }
+}
+
+.SliderTitle {
+  font-size: 22px;
+  font-weight: $font-weight-bolder;
+  color: $dark-grey-color;
+
+  @include tablet {
+    font-size: 24px;
+  }
+
+  @include desktop {
+    font-size: $font-size-32;
+  }
+}
+
+.sliderButton {
+  position: absolute;
+  top: -65px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid $light-grey-color;
+
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    border-color: $dark-grey-color;
+  }
+}
+
+.prevButton {
+  right: calc(32px + 16px + 16px);
+
+  @include tablet {
+    right: calc(32px + 24px + 16px);
+  }
+
+  @include desktop {
+    right: calc(32px + 16px);
+  }
+}
+
+.nextButton {
+  right: 16px;
+
+  @include tablet {
+    right: 24px;
+  }
+
+  @include desktop {
+    right: 0px;
+  }
+}
+
+.sliderViewport {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+
+  --items-per-view: 1.5;
+
+  @include tablet {
+    --items-per-view: 2.5;
+  }
+
+  @include desktop {
+    --items-per-view: 4;
+  }
+}
+
+.slidesWrapper {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slidesTrack {
+  display: flex;
+  transition: transform 0.6s ease;
+  will-change: transform;
+  gap: 16px;
+}
+
+.slideItem {
+  flex: 0 0 auto;
+
+  width: calc((100% - 16px) / 1.5);
+
+  @include tablet {
+    width: calc((100% - 32px) / 2.5);
+  }
+
+  @include desktop {
+    width: 272px;
+  }
+}

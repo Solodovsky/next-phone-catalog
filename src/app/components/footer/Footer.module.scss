@@ -1,0 +1,111 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.footer {
+  border-top: 1px solid $light-grey-color;
+  padding: 32px 0;
+}
+
+.footerContent {
+  display: flex;
+  flex-direction: column;
+  color: $gray-color;
+  min-height: 257px;
+  gap: 32px;
+
+  @include tablet {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 96px;
+  }
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    min-height: 96px;
+  }
+}
+
+.logo {
+  @include flex-start;
+}
+
+.logoIcon {
+  width: 89px;
+  height: 31px;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 16px;
+
+  @include tablet {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 14px;
+  }
+
+  @include desktop {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    gap: 107px;
+  }
+}
+
+.link {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  color: $gray-color;
+  text-decoration: none;
+  line-height: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+
+  &:hover {
+    color: $dark-grey-color;
+  }
+}
+
+.arrowButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  transition: color 0.3s ease;
+
+  &:hover .arrowButtonText {
+    color: $dark-grey-color;
+  }
+}
+
+.arrowButtonText {
+  font-size: 12px;
+  font-weight: $font-weight-bold;
+  color: $gray-color;
+  line-height: 11px;
+  letter-spacing: 0.04em;
+  transition: color 0.3s ease;
+}
+
+.arrowIcon {
+  width: 32px;
+  height: 32px;
+  border: 1px solid $light-grey-color;
+  transition: border-color 0.3s ease;
+
+  .arrowButton:hover & {
+    border-color: $dark-grey-color;
+  }
+}

@@ -1,0 +1,31 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.productList {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(275px, 1fr));
+  row-gap: 40px;
+  column-gap: 16px;
+
+  @include tablet {
+    grid-template-columns: repeat(3, 1fr);
+  }
+  @include desktop {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.productEmpty {
+  @include flex-center;
+  flex-direction: column;
+  min-height: 400px;
+  padding: 80px 16px;
+  text-align: center;
+  width: 100%;
+
+  p {
+    color: $gray-color;
+    font-size: $font-size-16;
+    margin: 0;
+  }
+}

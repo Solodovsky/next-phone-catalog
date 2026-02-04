@@ -1,0 +1,10 @@
+export { FavoriteIcon } from './FavoriteIcon';
+export { CartIcon } from './CartIcon';
+export { MenuIcon } from './MenuIcon';
+export { CloseIcon } from './CloseIcon';
+export { LogoIcon } from './LogoIcon';
+export { ArrowIcon } from './ArrowIcon';
+export { default as PlusIcon } from './PlusIcon';
+export { default as MinuseIcon } from './MinuseIcon';
+export { default as SliderLeftIcon } from './SliderLefticon';
+export { default as SliderRightIcon } from './SliderRightIcon';

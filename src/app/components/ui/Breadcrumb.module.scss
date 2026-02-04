@@ -1,0 +1,52 @@
+@use '../../styles/variables' as *;
+@use '../../styles/mixins' as *;
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 40px;
+  margin-top: 24px;
+  font-size: $font-size-12;
+  color: $gray-color;
+  line-height: 1;
+}
+
+.breadcrumbLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $dark-grey-color;
+  text-decoration: none;
+  transition: color 0.3s;
+  line-height: 1;
+}
+
+.homeIcon {
+  width: 16px;
+  height: 16px;
+  color: currentColor;
+  display: block;
+}
+
+.separator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+}
+
+.separatorIcon {
+  display: block;
+  width: 6px;
+  height: 10px;
+}
+
+.currentPage {
+  color: $gray-color;
+  font-size: 12px;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+}

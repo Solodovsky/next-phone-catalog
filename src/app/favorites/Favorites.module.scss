@@ -1,0 +1,58 @@
+@use '../styles/variables' as *;
+@use '../styles/mixins' as *;
+
+.favoritesPage {
+  padding: 32px 0 80px;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  align-items: baseline;
+  justify-content: center;
+  gap: 16px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  color: $dark-grey-color;
+}
+
+.count {
+  font-size: $font-size-14;
+  color: $gray-color;
+}
+
+.emptyState {
+  @include flex-center;
+  flex-direction: column;
+  gap: 16px;
+  text-align: center;
+  padding: 80px 16px;
+  border: 1px dashed $light-grey-color;
+  border-radius: 24px;
+}
+
+.emptyText {
+  color: $gray-color;
+  max-width: 420px;
+}
+
+.emptyLink {
+  margin-top: 8px;
+  padding: 12px 32px;
+  border-radius: 48px;
+  background: $dark-grey-color;
+  color: $white-color;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: darken($dark-grey-color, 5%);
+  }
+}
