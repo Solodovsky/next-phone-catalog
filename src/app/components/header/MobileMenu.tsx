@@ -17,6 +17,7 @@ type MobileMenuProps = {
   navItems: NavItem[];
   renderFavoritesLink: (extraClass?: string) => React.ReactElement;
   renderCartLink: (extraClass?: string) => React.ReactElement;
+  renderAuthLink: (extraClass?: string) => React.ReactElement;
 };
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({
@@ -25,6 +26,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
   navItems,
   renderFavoritesLink,
   renderCartLink,
+  renderAuthLink,
 }) => {
   const pathname = usePathname();
 
@@ -58,6 +60,7 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
       <div className={styles.mobileActions}>
         {renderFavoritesLink(styles.mobileIconLink)}
         {renderCartLink(styles.mobileIconLink)}
+        {renderAuthLink(styles.mobileIconLink)}
       </div>
     </nav>
   );

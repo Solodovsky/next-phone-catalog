@@ -2,14 +2,16 @@
 
 import React from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useAppSelector } from "../../../store/hooks/redux";
+import { usePathname, useRouter } from "next/navigation";
+import { useAppSelector, useAppDispatch } from "../../../store/hooks/redux";
+import { logout } from "../../../store/slices/authSlice";
 import {
   FavoriteIcon,
   CartIcon,
   MenuIcon,
   CloseIcon,
   LogoIcon,
+  UserIcon,
 } from "../icons";
 import { MobileMenu } from "./MobileMenu";
 import { useMobileMenu } from "./useMobileMenu";
@@ -24,11 +26,17 @@ const navItems = [
 
 const Header: React.FC = () => {
   const pathname = usePathname();
+  const router = useRouter();
+  const dispatch = useAppDispatch();
   const { isMenuOpen, toggleMenu, closeMenu } = useMobileMenu();
   const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
   const favoritesCount = useAppSelector(
     (state: any) => state.favorites?.length || 0
   );
+  const isAuthenticated = useAppSelector(
+    (state) => state.auth?.isAuthenticated || false
+  );
+  const user = useAppSelector((state) => state.auth?.user);
 
   const renderFavoritesLink = (extraClass = "") => (
     <Link
@@ -59,6 +67,42 @@ const Header: React.FC = () => {
       )}
     </Link>
   );
+
+  const handleLogout = async () => {
+    await fetch("/api/auth/logout", { method: "POST" });
+    dispatch(logout());
+    router.push("/");
+  };
+
+  const renderAuthLink = (extraClass = "") => {
+    if (isAuthenticated) {
+      return (
+        <div className={`${styles.authContainer} ${extraClass}`}>
+          <button
+            onClick={handleLogout}
+            className={styles.authButton}
+            aria-label="Logout"
+            title={user?.email || "Logout"}
+          >
+            <UserIcon className={styles.icon} width={16} height={16} />
+            <span className={styles.authText}>Logout</span>
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <Link
+        href="/login"
+        className={`${styles.iconLink} ${extraClass} ${
+          pathname === "/login" ? styles.mobileIconLinkActive : ""
+        }`.trim()}
+        aria-label="Login"
+      >
+        <UserIcon className={styles.icon} width={16} height={16} />
+      </Link>
+    );
+  };
 
   return (
     <header className={styles.header}>
@@ -92,6 +136,7 @@ const Header: React.FC = () => {
           <div className={styles.desktopIcons}>
             {renderFavoritesLink()}
             {renderCartLink()}
+            {renderAuthLink()}
           </div>
           <button
             className={styles.menuButton}
@@ -112,6 +157,7 @@ const Header: React.FC = () => {
           navItems={navItems}
           renderFavoritesLink={renderFavoritesLink}
           renderCartLink={renderCartLink}
+          renderAuthLink={renderAuthLink}
         />
       </div>
     </header>

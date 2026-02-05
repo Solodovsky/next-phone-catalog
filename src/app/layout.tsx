@@ -16,8 +16,9 @@ const mont = localFont({
 });
 
 export const metadata: Metadata = {
-  title: "Nice Gadgets | Phone Catalog",
-  description: "Welcome to Nice Gadgets store - mobile phones, tablets and accessories",
+  title: "Nice Gadgets",
+  description:
+    "Welcome to Nice Gadgets store - mobile phones, tablets and accessories",
 };
 
 export default function RootLayout({

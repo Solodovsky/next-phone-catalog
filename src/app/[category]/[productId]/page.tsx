@@ -1,24 +1,24 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'next/navigation';
-import styles from './Details.module.scss';
-import Breadcrumb from '../../components/ui/Breadcrumb';
-import ButtonCard from '../../components/ui/ButtonCard';
-import ProductList from '../../components/ui/ProductList';
-import { FavoriteIcon } from '../../components/icons';
-import productsApi from '@/lib/productsApi';
-import type { EndpointName } from '@/lib/types';
-import type { Product } from '@/lib/types';
-import { useAppDispatch, useAppSelector } from '@/store/hooks/redux';
-import { addToCart, removeFromCart } from '@/store/slices/cartSlice';
-import { toggleFavorite } from '@/store/slices/favoritesSlice';
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+import styles from "./Details.module.scss";
+import Breadcrumb from "../../components/ui/Breadcrumb";
+import ButtonCard from "../../components/ui/ButtonCard";
+import HomeSlider from "../../components/home/HomeSlider";
+import { FavoriteIcon } from "../../components/icons";
+import productsApi from "@/lib/productsApi";
+import type { EndpointName } from "@/lib/types";
+import type { Product } from "@/lib/types";
+import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
+import { addToCart, removeFromCart } from "@/store/slices/cartSlice";
+import { toggleFavorite } from "@/store/slices/favoritesSlice";
 
 const AVAILABLE_COLORS = [
-  { id: 'gold', color: 'gold', image: '/img/gold.png' },
-  { id: 'green', color: 'green', image: '/img/green.png' },
-  { id: 'silver', color: 'silver', image: '/img/silver.png' },
-  { id: 'gray', color: 'gray', image: '/img/gray.png' },
+  { id: "gold", color: "gold", image: "/img/gold.png" },
+  { id: "green", color: "green", image: "/img/green.png" },
+  { id: "silver", color: "silver", image: "/img/silver.png" },
+  { id: "gray", color: "gray", image: "/img/gray.png" },
 ];
 
 type ProductCharacteristic = {
@@ -32,9 +32,9 @@ const Details = () => {
   const productId = params?.productId as string | undefined;
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [productImg, setProductImg] = useState<string>('');
+  const [productImg, setProductImg] = useState<string>("");
   const [products, setProducts] = useState<Product[]>([]);
-  const [selectCapacity, setSelectCapacity] = useState<string>('');
+  const [selectCapacity, setSelectCapacity] = useState<string>("");
 
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart?.items || []);
@@ -91,9 +91,9 @@ const Details = () => {
 
         if (!productData) return;
         setProduct(productData);
-        setSelectCapacity(productData.capacity || '');
+        setSelectCapacity(productData.capacity || "");
 
-        if (category === 'phones') {
+        if (category === "phones") {
           const productsData = await productsApi.fetchData<Product>(
             category as EndpointName,
             { model: productData.id.slice(0, 15) }
@@ -125,20 +125,20 @@ const Details = () => {
 
   const getCharacteristic = (product: Product): ProductCharacteristic[] => {
     const baseCharacteristic: ProductCharacteristic[] = [
-      { key: 'Screen', value: product.screen },
-      { key: 'Resolution', value: product.resolution },
-      { key: 'Processor', value: product.processor },
-      { key: 'RAM', value: product.ram },
-      { key: 'Built in memory', value: product.capacity },
-      { key: 'Cell', value: product.cell },
+      { key: "Screen", value: product.screen },
+      { key: "Resolution", value: product.resolution },
+      { key: "Processor", value: product.processor },
+      { key: "RAM", value: product.ram },
+      { key: "Built in memory", value: product.capacity },
+      { key: "Cell", value: product.cell },
     ];
 
-    if (product.category !== 'accessories' && 'camera' in product) {
-      baseCharacteristic.push({ key: 'Camera', value: product.camera });
+    if (product.category !== "accessories" && "camera" in product) {
+      baseCharacteristic.push({ key: "Camera", value: product.camera });
     }
 
-    if (product.category !== 'accessories' && 'zoom' in product) {
-      baseCharacteristic.push({ key: 'Zoom', value: product.zoom });
+    if (product.category !== "accessories" && "zoom" in product) {
+      baseCharacteristic.push({ key: "Zoom", value: product.zoom });
     }
     return baseCharacteristic;
   };
@@ -146,6 +146,9 @@ const Details = () => {
   const characteristics: ProductCharacteristic[] = product
     ? getCharacteristic(product)
     : [];
+
+  const mainImageSrc =
+    productImg || (product?.images?.[0] ? `/${product.images[0]}` : null);
 
   return (
     <div className="page container">
@@ -159,13 +162,13 @@ const Details = () => {
               <button
                 onClick={() => handleImageClick(image)}
                 className={`${styles.imageButton} ${
-                  productImg === `/${image}` ? styles.imageButtonActive : ''
+                  productImg === `/${image}` ? styles.imageButtonActive : ""
                 }`}
                 type="button"
               >
                 <img
                   src={`/${image}`}
-                  alt={product?.name || ''}
+                  alt={product?.name || ""}
                   className={styles.image}
                 />
               </button>
@@ -174,12 +177,7 @@ const Details = () => {
         </ul>
 
         <div className={styles.mainImage}>
-          <img
-            src={
-              productImg || (product?.images[0] ? `/${product.images[0]}` : '')
-            }
-            alt={product?.name || ''}
-          />
+          {mainImageSrc && <img src={mainImageSrc} alt={product?.name || ""} />}
         </div>
 
         <div className={styles.infoContainer}>
@@ -206,7 +204,7 @@ const Details = () => {
                   key={i}
                   onClick={() => handleCapacityClick(capacity)}
                   className={`${styles.capacityBtn} ${
-                    capacity === selectCapacity ? styles.capacityActive : ''
+                    capacity === selectCapacity ? styles.capacityActive : ""
                   }`}
                 >
                   {capacity}
@@ -224,16 +222,16 @@ const Details = () => {
             <ButtonCard
               className={styles.addBtn}
               onClick={handleAddToCart}
-              label={isInCart ? 'Selected' : 'Add to cart'}
+              label={isInCart ? "Selected" : "Add to cart"}
               isSelected={isInCart}
             />
             <button
               onClick={handleToggleFavorite}
               className={`${styles.favoriteButton} ${
-                isInFavorites ? styles.favoriteButtonActive : ''
+                isInFavorites ? styles.favoriteButtonActive : ""
               }`}
               aria-label={
-                isInFavorites ? 'Remove from favorites' : 'Add to favorites'
+                isInFavorites ? "Remove from favorites" : "Add to favorites"
               }
               type="button"
             >
@@ -249,8 +247,8 @@ const Details = () => {
           <div className={styles.charContainer}>
             {characteristics.slice(0, 4).map((char, i) => (
               <div key={i} className={styles.charList}>
-                <p className={styles.charKey}>{char.key}</p>
-                <p className={styles.charValue}>{char.value}</p>
+                <span className={styles.charKey}>{char.key}</span>
+                <span className={styles.charValue}>{char.value}</span>
               </div>
             ))}
           </div>
@@ -264,9 +262,7 @@ const Details = () => {
             <div key={i}>
               <h3 className={styles.aboutTittle}>{el.title}</h3>
               <p className={styles.aboutText}>{el.text[0]}</p>
-              {el.text[1] && (
-                <p className={styles.aboutText}>{el.text[1]}</p>
-              )}
+              {el.text[1] && <p className={styles.aboutText}>{el.text[1]}</p>}
             </div>
           ))}
         </div>
@@ -275,8 +271,8 @@ const Details = () => {
           <h3 className={styles.techTitle}>Tech specs</h3>
           {characteristics.map((char, i) => (
             <div key={i} className={styles.charList}>
-              <p className={styles.charAllKey}>{char.key}</p>
-              <p className={styles.charAllValue}>{char.value}</p>
+              <span className={styles.charAllKey}>{char.key}</span>
+              <span className={styles.charAllValue}>{char.value}</span>
             </div>
           ))}
         </div>
@@ -284,8 +280,7 @@ const Details = () => {
 
       {products.length > 0 && (
         <div className={styles.alsoLike}>
-          <h2 className={styles.alsoLikeTitle}>You may also like</h2>
-          <ProductList products={products} />
+          <HomeSlider products={products} title="You may also like" />
         </div>
       )}
     </div>
