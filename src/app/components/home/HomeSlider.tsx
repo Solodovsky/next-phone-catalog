@@ -1,13 +1,13 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import styles from './HomeSlider.module.scss';
-import { ProductCard } from '../ui/ProductCard';
-import { SliderLeftIcon, SliderRightIcon } from '../icons';
-import type { Product } from '@/lib/types';
+import React from "react";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import styles from "./HomeSlider.module.scss";
+import { ProductCard } from "../ui/ProductCard";
+import { SliderLeftIcon, SliderRightIcon } from "../icons";
+import type { Product } from "@/lib/types";
 
 type Props = {
   title: string;
@@ -59,32 +59,15 @@ const HomeSlider: React.FC<Props> = ({ title, products }) => {
       {
         breakpoint: 800,
         settings: {
-          slidesToShow: 2.5,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 600,
-        settings: {
           slidesToShow: 2,
           slidesToScroll: 2,
-          initialSlide: 2,
         },
       },
       {
-        breakpoint: 500,
-        settings: {
-          slidesToShow: 2,
-          slidesToScroll: 2,
-          initialSlide: 2,
-        },
-      },
-      {
-        breakpoint: 480,
+        breakpoint: 640,
         settings: {
           slidesToShow: 1.5,
-          slidesToScroll: 1,
+          slidesToScroll: 1.5,
         },
       },
     ],
