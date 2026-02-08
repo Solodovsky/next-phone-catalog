@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import {
   removeFromCart,
@@ -10,12 +11,22 @@ import {
 import styles from "./Cart.module.scss";
 import Breadcrumb from "../components/ui/Breadcrumb";
 import { CloseIcon, MinuseIcon, PlusIcon } from "../components/icons";
-
 import ButtonCard from "../components/ui/ButtonCard";
 
 const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, totalCount } = useAppSelector((state) => state.cart);
+  const router = useRouter();
+  const isAuth = useAppSelector(
+    (state) => state.auth?.isAuthenticated ?? false
+  );
+
+  const handlePayClick = () => {
+    if (!isAuth) {
+      router.push("/login");
+      return;
+    }
+  };
 
   const totalPrice = items.reduce(
     (total, item) => total + item.price * item.quantity,
@@ -97,7 +108,7 @@ const Cart: React.FC = () => {
         <div className={styles.total}>
           <h3 className={styles.totalPrice}>${totalPrice}</h3>
           <p className={styles.totalText}>Total for {totalCount} items</p>
-          <ButtonCard label="Pay" />
+          <ButtonCard onClick={handlePayClick} label="Pay" />
         </div>
       </div>
     </section>

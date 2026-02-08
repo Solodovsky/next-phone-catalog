@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
-import { findUserByEmail } from "../usersStore";
+import { prisma } from "@/lib/prisma";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -12,7 +12,7 @@ if (!JWT_SECRET) {
 export async function POST(req: NextRequest) {
   const { email, password } = await req.json();
 
-  const user = findUserByEmail(email);
+  const user = await prisma.user.findUnique({ where: { email } });
 
   if (!user) {
     return NextResponse.json(
