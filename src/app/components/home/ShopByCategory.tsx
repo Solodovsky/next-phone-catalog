@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Link from 'next/link';
 import styles from './ShopByCategory.module.scss';
 
@@ -40,10 +41,12 @@ const ShopByCategory: React.FC = () => {
             className={styles.shopByCategoryLink}
           >
             <div className={styles.shopByCategoryImageContainer}>
-              <img
+              <Image
                 src={category.image}
                 alt={category.imageAlt}
+                fill
                 className={styles.shopByCategoryImage}
+                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 33vw, 368px"
               />
             </div>
             <div className={styles.shopByCategoryItemContent}>

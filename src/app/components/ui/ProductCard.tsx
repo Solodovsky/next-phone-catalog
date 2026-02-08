@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { ButtonCard } from "./ButtonCard";
 import { FavoriteIcon } from "../../components/icons";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks/redux";
@@ -49,7 +50,13 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
   return (
     <Link href={detailsPath} className={styles.productCard}>
       <div className={styles.imageContainer}>
-        <img src={path} alt={product.name} className={styles.image} />
+        <Image
+          src={path}
+          alt={product.name}
+          fill
+          className={styles.image}
+          sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 272px"
+        />
       </div>
 
       <div className={styles.info}>

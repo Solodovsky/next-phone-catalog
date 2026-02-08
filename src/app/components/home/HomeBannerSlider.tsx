@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import Image from 'next/image';
 import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
@@ -58,19 +59,15 @@ const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({ slides }) => {
       <Slider {...settings} className={styles.slider}>
         {slides.map((slide) => (
           <div key={slide.id} className={styles.sliderItem}>
-            <picture className={styles.sliderPicture}>
-              {slide.mobileImageUrl && (
-                <source
-                  media="(max-width: 639px)"
-                  srcSet={slide.mobileImageUrl}
-                />
-              )}
-              <img
+            <div className={styles.sliderPicture}>
+              <Image
                 src={slide.imageUrl}
                 alt={slide.imageAlt || ''}
+                fill
                 className={styles.sliderImage}
+                sizes="100vw"
               />
-            </picture>
+            </div>
           </div>
         ))}
       </Slider>

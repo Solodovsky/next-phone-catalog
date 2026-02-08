@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import {
@@ -73,9 +74,11 @@ const Cart: React.FC = () => {
                 <button onClick={() => handleRemoveItem(item.id)}>
                   <CloseIcon />
                 </button>
-                <img
+                <Image
                   src={`/${item.image}`}
                   alt={item.name}
+                  width={80}
+                  height={80}
                   className={styles.itemImage}
                 />
                 <p className={styles.itemName}>{item.name}</p>

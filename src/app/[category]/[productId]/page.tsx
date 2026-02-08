@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useParams } from "next/navigation";
 import styles from "./Details.module.scss";
 import Breadcrumb from "../../components/ui/Breadcrumb";
@@ -166,9 +167,11 @@ const Details = () => {
                 }`}
                 type="button"
               >
-                <img
+                <Image
                   src={`/${image}`}
                   alt={product?.name || ""}
+                  width={80}
+                  height={80}
                   className={styles.image}
                 />
               </button>
@@ -177,7 +180,16 @@ const Details = () => {
         </ul>
 
         <div className={styles.mainImage}>
-          {mainImageSrc && <img src={mainImageSrc} alt={product?.name || ""} />}
+          {mainImageSrc && (
+            <Image
+              src={mainImageSrc}
+              alt={product?.name || ""}
+              width={500}
+              height={500}
+              className={styles.mainImageImg}
+              sizes="(max-width: 768px) 288px, 100vw"
+            />
+          )}
         </div>
 
         <div className={styles.infoContainer}>
@@ -186,9 +198,11 @@ const Details = () => {
             <div className={styles.colorsList}>
               {AVAILABLE_COLORS.map((color) => (
                 <button key={color.id} className={styles.colorButton}>
-                  <img
+                  <Image
                     src={color.image}
                     alt={color.color}
+                    width={40}
+                    height={40}
                     className={styles.colorImage}
                   />
                 </button>

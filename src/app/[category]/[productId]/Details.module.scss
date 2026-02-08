@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .mainTitle {
   font-size: 32px;
@@ -101,7 +101,8 @@
     order: 1;
   }
 
-  img {
+  img,
+  .mainImageImg {
     width: 100%;
     height: auto;
     max-height: 500px;
@@ -375,10 +376,6 @@
   font-size: 14px;
   font-weight: 500;
   margin-bottom: 32px;
-}
-
-.alsoLike {
-  margin-top: 80px;
 }
 
 .alsoLikeTitle {
