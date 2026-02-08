@@ -15,9 +15,9 @@ type MobileMenuProps = {
   isOpen: boolean;
   onClose: () => void;
   navItems: NavItem[];
-  renderFavoritesLink: (extraClass?: string) => React.ReactElement;
-  renderCartLink: (extraClass?: string) => React.ReactElement;
-  renderAuthLink: (extraClass?: string) => React.ReactElement;
+  renderFavoritesLink: (extraClass?: string, onNavigate?: () => void) => React.ReactElement;
+  renderCartLink: (extraClass?: string, onNavigate?: () => void) => React.ReactElement;
+  renderAuthLink: (extraClass?: string, onNavigate?: () => void) => React.ReactElement;
 };
 
 export const MobileMenu: React.FC<MobileMenuProps> = ({
@@ -58,9 +58,9 @@ export const MobileMenu: React.FC<MobileMenuProps> = ({
         ))}
       </div>
       <div className={styles.mobileActions}>
-        {renderFavoritesLink(styles.mobileIconLink)}
-        {renderCartLink(styles.mobileIconLink)}
-        {renderAuthLink(styles.mobileIconLink)}
+        {renderFavoritesLink(styles.mobileIconLink, onClose)}
+        {renderCartLink(styles.mobileIconLink, onClose)}
+        {renderAuthLink(styles.mobileIconLink, onClose)}
       </div>
     </nav>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "../../../store/hooks/redux";
@@ -29,6 +29,18 @@ const Header: React.FC = () => {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const { isMenuOpen, toggleMenu, closeMenu } = useMobileMenu();
+
+  useEffect(() => {
+    if (isMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [isMenuOpen]);
+
   const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
   const favoritesCount = useAppSelector(
     (state: any) => state.favorites?.length || 0
@@ -38,13 +50,14 @@ const Header: React.FC = () => {
   );
   const user = useAppSelector((state) => state.auth?.user);
 
-  const renderFavoritesLink = (extraClass = "") => (
+  const renderFavoritesLink = (extraClass = "", onNavigate?: () => void) => (
     <Link
       href="/favorites"
       className={`${styles.iconLink} ${extraClass} ${
         pathname === "/favorites" ? styles.mobileIconLinkActive : ""
       }`.trim()}
       aria-label="Favorites"
+      onClick={onNavigate}
     >
       <FavoriteIcon className={styles.icon} width={40} height={40} />
       {favoritesCount > 0 && (
@@ -53,13 +66,14 @@ const Header: React.FC = () => {
     </Link>
   );
 
-  const renderCartLink = (extraClass = "") => (
+  const renderCartLink = (extraClass = "", onNavigate?: () => void) => (
     <Link
       href="/cart"
       className={`${styles.iconLink} ${extraClass} ${
         pathname === "/cart" ? styles.mobileIconLinkActive : ""
       }`.trim()}
       aria-label="Cart"
+      onClick={onNavigate}
     >
       <CartIcon className={styles.icon} />
       {cartItemsCount > 0 && (
@@ -74,12 +88,15 @@ const Header: React.FC = () => {
     router.push("/");
   };
 
-  const renderAuthLink = (extraClass = "") => {
+  const renderAuthLink = (extraClass = "", onNavigate?: () => void) => {
     if (isAuthenticated) {
       return (
         <div className={`${styles.authContainer} ${extraClass}`}>
           <button
-            onClick={handleLogout}
+            onClick={() => {
+              onNavigate?.();
+              handleLogout();
+            }}
             className={styles.authButton}
             aria-label="Logout"
             title={user?.email || "Logout"}
@@ -98,6 +115,7 @@ const Header: React.FC = () => {
           pathname === "/login" ? styles.mobileIconLinkActive : ""
         }`.trim()}
         aria-label="Login"
+        onClick={onNavigate}
       >
         <UserIcon className={styles.icon} width={16} height={16} />
       </Link>

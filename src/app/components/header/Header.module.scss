@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .header {
   position: sticky;
@@ -97,7 +97,7 @@
   border-bottom-color: transparent;
 
   &::after {
-    content: '';
+    content: "";
     position: absolute;
     left: 0;
     right: 0;
@@ -271,7 +271,7 @@
     color: $dark-grey-color;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;
@@ -305,7 +305,7 @@
     text-decoration: none;
 
     &::after {
-      content: '';
+      content: "";
       position: absolute;
       left: 0;
       right: 0;

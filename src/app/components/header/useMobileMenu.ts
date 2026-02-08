@@ -12,7 +12,7 @@ export const useMobileMenu = () => {
   }, []);
 
   const toggleMenu = useCallback(() => {
-    setIsMenuOpen(prev => !prev);
+    setIsMenuOpen((prev) => !prev);
   }, []);
 
   return {
