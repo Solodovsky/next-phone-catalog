@@ -10,7 +10,7 @@ import { SliderLeftIcon, SliderRightIcon } from "../icons";
 import type { Product } from "@/lib/types";
 
 const getSlidesForWidth = (width: number) => {
-  if (width <= 640) return { slidesToShow: 1.5, slidesToScroll: 1.5 };
+  if (width <= 640) return { slidesToShow: 1, slidesToScroll: 1 };
   if (width <= 800) return { slidesToShow: 2, slidesToScroll: 2 };
   if (width <= 1024) return { slidesToShow: 3, slidesToScroll: 3 };
   return { slidesToShow: 4, slidesToScroll: 4 };
@@ -78,7 +78,7 @@ const HomeSlider: React.FC<Props> = ({ title, products }) => {
         },
       },
       { breakpoint: 800, settings: { slidesToShow: 2, slidesToScroll: 2 } },
-      { breakpoint: 640, settings: { slidesToShow: 1.5, slidesToScroll: 1.5 } },
+      { breakpoint: 640, settings: { slidesToShow: 1, slidesToScroll: 1 } },
     ],
   };
 
