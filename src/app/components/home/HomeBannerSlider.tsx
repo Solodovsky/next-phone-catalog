@@ -1,12 +1,12 @@
-'use client';
+"use client";
 
-import React from 'react';
-import Image from 'next/image';
-import Slider from 'react-slick';
-import 'slick-carousel/slick/slick.css';
-import 'slick-carousel/slick/slick-theme.css';
-import styles from './HomeBannerSlider.module.scss';
-import { SliderLeftIcon, SliderRightIcon } from '../icons';
+import React from "react";
+import Image from "next/image";
+import Slider from "react-slick";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
+import styles from "./HomeBannerSlider.module.scss";
+import { SliderLeftIcon, SliderRightIcon } from "../icons";
 
 export type HomeBannerSlide = {
   id: number;
@@ -57,15 +57,16 @@ const HomeBannerSlider: React.FC<HomeBannerSliderProps> = ({ slides }) => {
   return (
     <div className={styles.sliderContainer}>
       <Slider {...settings} className={styles.slider}>
-        {slides.map((slide) => (
+        {slides.map((slide, index) => (
           <div key={slide.id} className={styles.sliderItem}>
             <div className={styles.sliderPicture}>
               <Image
                 src={slide.imageUrl}
-                alt={slide.imageAlt || ''}
+                alt={slide.imageAlt || ""}
                 fill
                 className={styles.sliderImage}
                 sizes="100vw"
+                priority={index === 0}
               />
             </div>
           </div>

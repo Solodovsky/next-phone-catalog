@@ -89,8 +89,12 @@ const HomeSlider: React.FC<Props> = ({ title, products }) => {
       </div>
       {clientWidth > 0 && products.length > 0 && (
         <Slider {...settings} className={styles.slick}>
-          {products.map((product) => (
-            <ProductCard key={product.id} product={product} />
+          {products.map((product, index) => (
+            <ProductCard
+              key={product.id}
+              product={product}
+              priority={index === 0}
+            />
           ))}
         </Slider>
       )}

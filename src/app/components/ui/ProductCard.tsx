@@ -11,9 +11,10 @@ import Link from "next/link";
 
 type Props = {
   product: Product;
+  priority?: boolean;
 };
 
-export const ProductCard: React.FC<Props> = ({ product }) => {
+export const ProductCard: React.FC<Props> = ({ product, priority }) => {
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart?.items || []);
   const favorites = useAppSelector((state: any) => state.favorites || []);
@@ -36,7 +37,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           name: product.name,
           image: product.images[0],
           price: product.priceDiscount || product.priceRegular,
-        })
+        }),
       );
     }
   };
@@ -56,6 +57,7 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
           fill
           className={styles.image}
           sizes="(max-width: 640px) 100vw, (max-width: 1200px) 50vw, 272px"
+          priority={priority}
         />
       </div>
 
@@ -115,6 +117,8 @@ export const ProductCard: React.FC<Props> = ({ product }) => {
             type="button"
           >
             <FavoriteIcon
+              width={46}
+              height={46}
               className={`${styles.favoriteIcon} ${
                 isInFavorites ? styles.favoriteIconActive : ""
               }`}

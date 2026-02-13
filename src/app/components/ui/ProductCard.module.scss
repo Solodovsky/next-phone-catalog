@@ -1,5 +1,5 @@
-@use '../../styles/variables' as *;
-@use '../../styles/mixins' as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .productCard {
   display: flex;
@@ -127,8 +127,6 @@
   align-items: center;
   justify-content: center;
   transition: all 0.3s ease;
-  min-width: 40px;
-  height: 40px;
   border: 1px solid $light-grey-color;
 
   &:hover {
@@ -137,8 +135,6 @@
 }
 
 .favoriteIcon {
-  width: 40px;
-  height: 40px;
   transition: all 0.3s ease;
   display: block;
 }

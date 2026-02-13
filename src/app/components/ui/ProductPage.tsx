@@ -1,20 +1,28 @@
 'use client';
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
 import Breadcrumb from "./Breadcrumb";
 import Pagination from "./Pagination";
 import ProductList from "./ProductList";
-import productsApi from "../../../lib/productsApi";
 import { Product } from "@/lib/types";
 import styles from "./ProductPage.module.scss";
 
 type Category = "phones" | "tablets" | "accessories";
 
+type PaginationInfo = {
+  total: number;
+  page: number;
+  items: number;
+  totalPages: number;
+};
+
 type Props = {
   category: Category;
   title: string;
   emptyMessage: string;
+  initialProducts: Product[];
+  initialPagination: PaginationInfo;
 };
 
 const SORT_OPTIONS = [
@@ -25,56 +33,22 @@ const SORT_OPTIONS = [
 
 const ITEMS_OPTIONS = [4, 8, 16] as const;
 
-const ProductPage: React.FC<Props> = ({ category, title, emptyMessage }) => {
+const ProductPage: React.FC<Props> = ({
+  category,
+  title,
+  emptyMessage,
+  initialProducts,
+  initialPagination,
+}) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
 
-  const [products, setProducts] = useState<Product[]>([]);
-  const [page, setPage] = useState<number>(
-    () => Number(searchParams.get("page")) || 1
-  );
-  const [items, setItems] = useState(
-    () => Number(searchParams.get("items")) || 16
-  );
-  const [totalItems, setTotalItems] = useState<number>(0);
-  const [sort, setSort] = useState<string>(
-    () => searchParams.get("sort") || ""
-  );
-
-  useEffect(() => {
-    const fetchProductsData = async () => {
-      try {
-        const queryParams: Record<string, string | number> = {
-          page,
-          items,
-        };
-
-        if (sort) {
-          queryParams.sort = sort;
-        }
-
-        const response = await productsApi.fetchData<Product>(
-          category,
-          queryParams
-        );
-
-        if (!response) {
-          return;
-        }
-
-        setProducts(response.data);
-
-        if (response.pagination) {
-          setTotalItems(response.pagination.total);
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchProductsData();
-  }, [page, category, items, sort]);
+  const page = Number(searchParams.get("page")) || 1;
+  const items = Number(searchParams.get("items")) || 16;
+  const sort = searchParams.get("sort") || "";
+  const products = initialProducts;
+  const totalItems = initialPagination.total;
 
   const updateParams = (updates: Record<string, string | number | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -94,22 +68,17 @@ const ProductPage: React.FC<Props> = ({ category, title, emptyMessage }) => {
   };
 
   const handlePageChange = (newPage: number) => {
-    setPage(newPage);
     updateParams({ page: newPage });
   };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newSort = event.target.value;
-    setSort(newSort);
-
-    updateParams({ page: page, sort: newSort || null });
+    updateParams({ page: 1, sort: newSort || null });
   };
 
   const handleItemsChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newItems = +event.target.value;
-    setItems(newItems);
-
-    updateParams({ page: page, items: newItems });
+    updateParams({ page: 1, items: newItems });
   };
 
   return (

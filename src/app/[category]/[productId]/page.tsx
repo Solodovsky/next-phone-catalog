@@ -188,6 +188,7 @@ const Details = () => {
               height={500}
               className={styles.mainImageImg}
               sizes="(max-width: 768px) 288px, 100vw"
+              priority
             />
           )}
         </div>

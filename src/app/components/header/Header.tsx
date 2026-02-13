@@ -43,10 +43,10 @@ const Header: React.FC = () => {
 
   const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
   const favoritesCount = useAppSelector(
-    (state: any) => state.favorites?.length || 0
+    (state: any) => state.favorites?.length || 0,
   );
   const isAuthenticated = useAppSelector(
-    (state) => state.auth?.isAuthenticated || false
+    (state) => state.auth?.isAuthenticated || false,
   );
   const user = useAppSelector((state) => state.auth?.user);
 
