@@ -9,7 +9,7 @@ import ButtonCard from "../../components/ui/ButtonCard";
 import HomeSlider from "../../components/home/HomeSlider";
 import { FavoriteIcon } from "../../components/icons";
 import productsApi from "@/lib/productsApi";
-import type { EndpointName } from "@/lib/types";
+import type { Category } from "@/lib/types";
 import type { Product } from "@/lib/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
 import { addToCart, removeFromCart } from "@/store/slices/cartSlice";
@@ -70,7 +70,7 @@ const Details = () => {
           name: product.name,
           image: product.images[0],
           price: product.priceDiscount || product.priceRegular,
-        })
+        }),
       );
     }
   };
@@ -86,8 +86,8 @@ const Details = () => {
 
       try {
         const productData = await productsApi.fetchDataId<Product>(
-          category as EndpointName,
-          productId
+          category as Category,
+          productId,
         );
 
         if (!productData) return;
@@ -96,20 +96,20 @@ const Details = () => {
 
         if (category === "phones") {
           const productsData = await productsApi.fetchData<Product>(
-            category as EndpointName,
-            { model: productData.id.slice(0, 15) }
+            category as Category,
+            { model: productData.id.slice(0, 15) },
           );
           if (productsData?.data) {
             setProducts(productsData.data);
           }
         } else {
           const productsData = await productsApi.fetchData<Product>(
-            category as EndpointName,
-            {}
+            category as Category,
+            {},
           );
           if (productsData?.data) {
             setProducts(
-              productsData.data.filter((p) => p.id !== productId).slice(0, 8)
+              productsData.data.filter((p) => p.id !== productId).slice(0, 8),
             );
           }
         }
