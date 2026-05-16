@@ -30,6 +30,28 @@
   }
 }
 
+.paginationEmbedded {
+  margin-top: 16px;
+  margin-bottom: 0;
+  flex-wrap: wrap;
+  justify-content: center;
+  row-gap: 8px;
+
+  @include tablet {
+    margin-top: 24px;
+    margin-bottom: 0;
+  }
+
+  @include desktop {
+    margin-top: 24px;
+    margin-bottom: 0;
+  }
+}
+
+.paginationEmbeddedAlignStart {
+  justify-content: flex-start;
+}
+
 .pageItem {
   min-width: 32px;
   height: 32px;

@@ -23,22 +23,34 @@ export default function RegisterPage() {
     setSuccess("");
     setIsLoading(true);
 
-    const res = await fetch("/api/auth/register", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(form),
-    });
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(form),
+      });
 
-    const data = await res.json();
-    setIsLoading(false);
+      let data: { message?: string } = {};
+      const text = await res.text();
+      try {
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        setError("Server returned an invalid response. Check the dev console.");
+        return;
+      }
 
-    if (!res.ok) {
-      setError(data.message || "Registration error");
-      return;
+      if (!res.ok) {
+        setError(data.message || "Registration error");
+        return;
+      }
+
+      setSuccess("Registration successful! Redirecting...");
+      setTimeout(() => router.push("/login"), 1500);
+    } catch {
+      setError("Network error. Is the dev server running?");
+    } finally {
+      setIsLoading(false);
     }
-
-    setSuccess("Registration successful! Redirecting...");
-    setTimeout(() => router.push("/login"), 1500);
   };
 
   return (

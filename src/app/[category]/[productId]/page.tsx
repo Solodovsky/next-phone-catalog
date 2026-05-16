@@ -12,6 +12,7 @@ import productsApi from "@/lib/productsApi";
 import type { Category } from "@/lib/types";
 import type { Product } from "@/lib/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
+import type { RootState } from "@/store/store";
 import { addToCart, removeFromCart } from "@/store/slices/cartSlice";
 import { toggleFavorite } from "@/store/slices/favoritesSlice";
 
@@ -27,29 +28,64 @@ type ProductCharacteristic = {
   value: string | string[];
 };
 
+function ProductImageGallery({ product }: { product: Product }) {
+  const [mainPath, setMainPath] = useState(
+    () => (product.images[0] ? `/${product.images[0]}` : ""),
+  );
+
+  return (
+    <>
+      <ul className={styles.imagesList}>
+        {product.images.map((image, i) => (
+          <li key={i} className={styles.imageItem}>
+            <button
+              onClick={() => setMainPath(`/${image}`)}
+              className={`${styles.imageButton} ${
+                mainPath === `/${image}` ? styles.imageButtonActive : ""
+              }`}
+              type="button"
+            >
+              <Image
+                src={`/${image}`}
+                alt={product.name}
+                width={80}
+                height={80}
+                className={styles.image}
+              />
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <div className={styles.mainImage}>
+        {mainPath && (
+          <Image
+            src={mainPath}
+            alt={product.name}
+            width={500}
+            height={500}
+            className={styles.mainImageImg}
+            sizes="(max-width: 768px) 288px, 100vw"
+            priority
+          />
+        )}
+      </div>
+    </>
+  );
+}
+
 const Details = () => {
   const params = useParams();
   const category = params?.category as string | undefined;
   const productId = params?.productId as string | undefined;
 
   const [product, setProduct] = useState<Product | null>(null);
-  const [productImg, setProductImg] = useState<string>("");
   const [products, setProducts] = useState<Product[]>([]);
   const [selectCapacity, setSelectCapacity] = useState<string>("");
 
   const dispatch = useAppDispatch();
   const cartItems = useAppSelector((state) => state.cart?.items || []);
-  const favorites = useAppSelector((state: any) => state.favorites || []);
-
-  const handleImageClick = (image: string) => {
-    setProductImg(`/${image}`);
-  };
-
-  useEffect(() => {
-    if (product?.images && product.images.length > 0) {
-      setProductImg(`/${product.images[0]}`);
-    }
-  }, [product]);
+  const favorites = useAppSelector((state: RootState) => state.favorites);
 
   const isInCart = product
     ? cartItems.some((item) => item.id === product.id)
@@ -148,50 +184,15 @@ const Details = () => {
     ? getCharacteristic(product)
     : [];
 
-  const mainImageSrc =
-    productImg || (product?.images?.[0] ? `/${product.images[0]}` : null);
-
   return (
     <div className="page container">
       <Breadcrumb />
       <h2 className={styles.mainTitle}>{product?.name}</h2>
 
       <div className={styles.imagesContainer}>
-        <ul className={styles.imagesList}>
-          {product?.images.map((image, i) => (
-            <li key={i} className={styles.imageItem}>
-              <button
-                onClick={() => handleImageClick(image)}
-                className={`${styles.imageButton} ${
-                  productImg === `/${image}` ? styles.imageButtonActive : ""
-                }`}
-                type="button"
-              >
-                <Image
-                  src={`/${image}`}
-                  alt={product?.name || ""}
-                  width={80}
-                  height={80}
-                  className={styles.image}
-                />
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className={styles.mainImage}>
-          {mainImageSrc && (
-            <Image
-              src={mainImageSrc}
-              alt={product?.name || ""}
-              width={500}
-              height={500}
-              className={styles.mainImageImg}
-              sizes="(max-width: 768px) 288px, 100vw"
-              priority
-            />
-          )}
-        </div>
+        {product && (
+          <ProductImageGallery key={product.id} product={product} />
+        )}
 
         <div className={styles.infoContainer}>
           <div className={styles.colorsContainer}>

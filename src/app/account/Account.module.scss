@@ -1,0 +1,185 @@
+@use "../styles/variables" as *;
+@use "../styles/mixins" as *;
+
+.accountPage {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  padding-bottom: 80px;
+}
+
+.pageHead {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.title {
+  font-size: 22px;
+  font-weight: 800;
+  color: $dark-grey-color;
+  margin: 0;
+
+  @include tablet {
+    font-size: 32px;
+  }
+}
+
+.subtitle {
+  margin: 0;
+  font-size: $font-size-14;
+  color: $gray-color;
+}
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+
+  @include desktop {
+    display: grid;
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 24px;
+  }
+}
+
+.card {
+  border: 1px solid $light-grey-color;
+  padding: 24px;
+  background: $white-color;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.cardTitle {
+  margin: 0;
+  font-size: $font-size-14;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: $dark-grey-color;
+}
+
+.rows {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid $light-grey-color;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+}
+
+.label {
+  font-size: $font-size-12;
+  font-weight: 600;
+  color: $gray-color;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.value {
+  font-size: $font-size-14;
+  font-weight: 500;
+  color: $dark-grey-color;
+  word-break: break-word;
+}
+
+.shortcuts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.shortcut {
+  display: block;
+}
+
+.shortcutLink {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border: 1px solid $light-grey-color;
+  text-decoration: none;
+  color: $dark-grey-color;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: $gray-color;
+    box-shadow: 0 2px 8px rgba(49, 50, 55, 0.06);
+  }
+}
+
+.shortcutChevron {
+  color: $gray-color;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.actions {
+  margin-top: 8px;
+  max-width: 400px;
+}
+
+.logoutButton {
+  width: 100%;
+  height: 48px;
+  background: $dark-grey-color;
+  color: $white-color;
+  border: none;
+  border-radius: $border-radius-8;
+  font-family: inherit;
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    box-shadow: 0 4px 12px #17203166;
+  }
+}
+
+.guestNote {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed $light-grey-color;
+  border-radius: 24px;
+  text-align: center;
+  color: $gray-color;
+  font-size: $font-size-14;
+}
+
+.loginLink {
+  display: inline-block;
+  margin-top: 16px;
+  padding: 12px 32px;
+  border-radius: 48px;
+  background: $dark-grey-color;
+  color: $white-color;
+  text-decoration: none;
+  font-weight: $font-weight-medium;
+  transition: background 0.2s ease;
+
+  &:hover {
+    background: darken($dark-grey-color, 5%);
+  }
+}

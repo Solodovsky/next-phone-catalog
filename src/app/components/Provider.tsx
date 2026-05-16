@@ -16,8 +16,14 @@ function StoreHydrator({ children }: { children: React.ReactNode }) {
     
     const checkAuth = async () => {
       try {
-        const res = await fetch("/api/auth/me");
-        const data = await res.json();
+        const res = await fetch("/api/auth/me", { credentials: "include" });
+        const text = await res.text();
+        let data: { user?: { id: string; email: string; name?: string } } = {};
+        try {
+          data = text ? JSON.parse(text) : {};
+        } catch {
+          return;
+        }
         if (data.user) {
           dispatch(setUser(data.user));
         }

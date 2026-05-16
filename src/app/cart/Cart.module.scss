@@ -19,17 +19,34 @@
   }
 
   @include desktop {
-    display: flex;
-    flex-direction: row;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
     gap: 16px;
-    align-items: flex-start;
-    margin-bottom: 80px;
+  }
+}
+
+.cartPagination {
+  width: 100%;
+  margin-bottom: 40px;
+
+  @include desktop {
+    grid-column: 1 / -1;
+    margin-top: 8px;
   }
 }
 
 .title {
   font-size: 24px;
   margin-bottom: 20px;
+}
+
+.itemsColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  min-width: 0;
 }
 
 .items {
@@ -66,12 +83,14 @@
   justify-content: space-between;
   align-items: center;
   padding: 24px;
-  gap: 50px;
+  gap: 16px;
   border: 1px solid $light-grey-color;
+  min-width: 0;
 
   @include mobile {
-    display: flex;
     flex-direction: column;
+    align-items: stretch;
+    gap: 16px;
   }
 }
 
@@ -80,6 +99,8 @@
   align-items: center;
   gap: 24px;
   flex: 1;
+  min-width: 0;
+  width: 100%;
 
   @include mobile {
     flex-wrap: wrap;
@@ -92,6 +113,9 @@
   font-size: 14px;
   color: $dark-grey-color;
   flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
 
   @include tablet {
     flex: 1;
@@ -107,16 +131,32 @@
   font-size: 22px;
   font-weight: 800;
   flex-shrink: 0;
+  margin: 0;
+  line-height: 1.2;
 }
 
 .quantityAndPrice {
   display: flex;
-  gap: 53px;
+  align-items: center;
+  flex-wrap: nowrap;
+  gap: 24px;
+  flex-shrink: 0;
+  margin-left: auto;
+  box-sizing: border-box;
 
   @include mobile {
     justify-content: space-between;
     width: 100%;
-    gap: 103px;
+    margin-left: 0;
+    gap: 16px;
+  }
+
+  @include tablet {
+    gap: 32px;
+  }
+
+  @include desktop {
+    gap: 40px;
   }
 }
 
@@ -137,7 +177,7 @@
   width: 100%;
 
   @include desktop {
-    width: 50%;
+    width: 100%;
   }
 }
 

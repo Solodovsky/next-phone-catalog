@@ -1,23 +1,23 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
-import {
-  removeFromCart,
-  updateQuantity,
-  clearCart,
-} from "@/store/slices/cartSlice";
+import { removeFromCart, updateQuantity } from "@/store/slices/cartSlice";
 import styles from "./Cart.module.scss";
 import Breadcrumb from "../components/ui/Breadcrumb";
 import { CloseIcon, MinuseIcon, PlusIcon } from "../components/icons";
 import ButtonCard from "../components/ui/ButtonCard";
+import Pagination from "../components/ui/Pagination";
+
+const ITEMS_PER_PAGE = 4;
 
 const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
   const { items, totalCount } = useAppSelector((state) => state.cart);
   const router = useRouter();
+  const [page, setPage] = useState(1);
   const isAuth = useAppSelector(
     (state) => state.auth?.isAuthenticated ?? false
   );
@@ -46,9 +46,10 @@ const Cart: React.FC = () => {
     }
   };
 
-  const handleClearCart = () => {
-    dispatch(clearCart());
-  };
+  const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+  const effectivePage = Math.min(page, totalPages);
+  const sliceStart = (effectivePage - 1) * ITEMS_PER_PAGE;
+  const visibleItems = items.slice(sliceStart, sliceStart + ITEMS_PER_PAGE);
 
   if (totalCount === 0) {
     return (
@@ -67,51 +68,63 @@ const Cart: React.FC = () => {
       <Breadcrumb />
       <h2 className={styles.title}>Cart</h2>
       <div className={styles.cart}>
-        <div className={styles.items}>
-          {items.map((item) => (
-            <div key={item.id} className={styles.cartItem}>
-              <div className={styles.itemInfo}>
-                <button onClick={() => handleRemoveItem(item.id)}>
-                  <CloseIcon />
-                </button>
-                <Image
-                  src={`/${item.image}`}
-                  alt={item.name}
-                  width={80}
-                  height={80}
-                  className={styles.itemImage}
-                />
-                <p className={styles.itemName}>{item.name}</p>
-                <div className={styles.quantityAndPrice}>
-                  <div className={styles.quantity}>
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity - 1)
-                      }
-                      className={styles.quantityButton}
-                    >
-                      <MinuseIcon />
-                    </button>
-                    <span>{item.quantity}</span>
-                    <button
-                      onClick={() =>
-                        handleQuantityChange(item.id, item.quantity + 1)
-                      }
-                      className={styles.quantityButton}
-                    >
-                      <PlusIcon />
-                    </button>
+        <div className={styles.itemsColumn}>
+          <div className={styles.items}>
+            {visibleItems.map((item) => (
+              <div key={item.id} className={styles.cartItem}>
+                <div className={styles.itemInfo}>
+                  <button onClick={() => handleRemoveItem(item.id)}>
+                    <CloseIcon />
+                  </button>
+                  <Image
+                    src={`/${item.image}`}
+                    alt={item.name}
+                    width={80}
+                    height={80}
+                    className={styles.itemImage}
+                  />
+                  <p className={styles.itemName}>{item.name}</p>
+                  <div className={styles.quantityAndPrice}>
+                    <div className={styles.quantity}>
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity - 1)
+                        }
+                        className={styles.quantityButton}
+                      >
+                        <MinuseIcon />
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button
+                        onClick={() =>
+                          handleQuantityChange(item.id, item.quantity + 1)
+                        }
+                        className={styles.quantityButton}
+                      >
+                        <PlusIcon />
+                      </button>
+                    </div>
+                    <p className={styles.itemPrice}>${item.price}</p>
                   </div>
-                  <p className={styles.itemPrice}>${item.price}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
         <div className={styles.total}>
           <h3 className={styles.totalPrice}>${totalPrice}</h3>
           <p className={styles.totalText}>Total for {totalCount} items</p>
           <ButtonCard onClick={handlePayClick} label="Pay" />
+        </div>
+        <div className={styles.cartPagination}>
+          <Pagination
+            totalItems={items.length}
+            items={ITEMS_PER_PAGE}
+            currentPage={effectivePage}
+            onPageChange={setPage}
+            embedded
+            embeddedAlign="center"
+          />
         </div>
       </div>
     </section>

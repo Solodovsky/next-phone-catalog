@@ -11,6 +11,8 @@ type Props = {
   items: number;
   currentPage: number;
   onPageChange: (page: number) => void;
+  embedded?: boolean;
+  embeddedAlign?: "start" | "center";
 };
 
 const Pagination: React.FC<Props> = ({
@@ -18,6 +20,8 @@ const Pagination: React.FC<Props> = ({
   items,
   currentPage,
   onPageChange,
+  embedded = false,
+  embeddedAlign = "center",
 }) => {
   const totalPages = Math.ceil(totalItems / items);
 
@@ -37,6 +41,16 @@ const Pagination: React.FC<Props> = ({
     return <SliderRightIcon />;
   };
 
+  const containerClassName = [
+    styles.pagination,
+    embedded && styles.paginationEmbedded,
+    embedded &&
+      embeddedAlign === "start" &&
+      styles.paginationEmbeddedAlignStart,
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
     <ReactPaginate
       nextLabel={nextArrow()}
@@ -47,7 +61,7 @@ const Pagination: React.FC<Props> = ({
       previousLabel={prevArrow()}
       forcePage={currentPage - 1}
       renderOnZeroPageCount={null}
-      containerClassName={styles.pagination}
+      containerClassName={containerClassName}
       pageClassName={styles.pageItem}
       pageLinkClassName={styles.pageLink}
       previousClassName={styles.pageItem}

@@ -4,7 +4,6 @@ import HomeBannerSlider, {
 } from "./components/home/HomeBannerSlider";
 import HomeSlider from "./components/home/HomeSlider";
 import ShopByCategory from "./components/home/ShopByCategory";
-import productsApi from "@/lib/productsApi";
 import type { Product } from "@/lib/types";
 import styles from "./Home.module.scss";
 import { headers } from "next/headers";
@@ -18,12 +17,12 @@ const slides: HomeBannerSlide[] = [
   },
   {
     id: 2,
-    imageUrl: "/img/banner1.jpg",
+    imageUrl: "/img/banner2.png",
     imageAlt: "iPhone banner",
   },
   {
     id: 3,
-    imageUrl: "/img/banner2.jpg",
+    imageUrl: "/img/banner3.png",
     imageAlt: "iPhone banner",
   },
 ];

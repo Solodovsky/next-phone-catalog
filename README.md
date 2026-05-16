@@ -1,18 +1,6 @@
-## Getting Started
+# next-phone-catalog
 
-First, run the development server:
-
-bash
+```bash
+npm install
 npm run dev
-
-# or
-
-yarn dev
-
-# or
-
-pnpm dev
-
-# or
-
-bun dev
+```

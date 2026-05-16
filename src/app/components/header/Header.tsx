@@ -2,9 +2,9 @@
 
 import React, { useEffect } from "react";
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "../../../store/hooks/redux";
-import { logout } from "../../../store/slices/authSlice";
+import { usePathname } from "next/navigation";
+import { useAppSelector } from "../../../store/hooks/redux";
+import type { RootState } from "../../../store/store";
 import {
   FavoriteIcon,
   CartIcon,
@@ -26,8 +26,6 @@ const navItems = [
 
 const Header: React.FC = () => {
   const pathname = usePathname();
-  const router = useRouter();
-  const dispatch = useAppDispatch();
   const { isMenuOpen, toggleMenu, closeMenu } = useMobileMenu();
 
   useEffect(() => {
@@ -43,7 +41,7 @@ const Header: React.FC = () => {
 
   const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
   const favoritesCount = useAppSelector(
-    (state: any) => state.favorites?.length || 0,
+    (state: RootState) => state.favorites?.length || 0,
   );
   const isAuthenticated = useAppSelector(
     (state) => state.auth?.isAuthenticated || false,
@@ -82,29 +80,20 @@ const Header: React.FC = () => {
     </Link>
   );
 
-  const handleLogout = async () => {
-    await fetch("/api/auth/logout", { method: "POST" });
-    dispatch(logout());
-    router.push("/");
-  };
-
   const renderAuthLink = (extraClass = "", onNavigate?: () => void) => {
     if (isAuthenticated) {
       return (
-        <div className={`${styles.authContainer} ${extraClass}`}>
-          <button
-            onClick={() => {
-              onNavigate?.();
-              handleLogout();
-            }}
-            className={styles.authButton}
-            aria-label="Logout"
-            title={user?.email || "Logout"}
-          >
-            <UserIcon className={styles.icon} width={16} height={16} />
-            <span className={styles.authText}>Logout</span>
-          </button>
-        </div>
+        <Link
+          href="/account"
+          className={`${styles.iconLink} ${extraClass} ${
+            pathname === "/account" ? styles.mobileIconLinkActive : ""
+          }`.trim()}
+          aria-label="Account"
+          title={user?.email ?? "Account"}
+          onClick={onNavigate}
+        >
+          <UserIcon className={styles.icon} width={16} height={16} />
+        </Link>
       );
     }
 

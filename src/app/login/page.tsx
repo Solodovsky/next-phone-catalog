@@ -28,6 +28,7 @@ export default function LoginPage() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),
+      credentials: "include",
     });
 
     const data = await res.json();
@@ -41,7 +42,7 @@ export default function LoginPage() {
     if (data.user) {
       dispatch(setUser(data.user));
     } else {
-      const meRes = await fetch("/api/auth/me");
+      const meRes = await fetch("/api/auth/me", { credentials: "include" });
       const meData = await meRes.json();
       if (meData.user) {
         dispatch(setUser(meData.user));
@@ -100,7 +101,7 @@ export default function LoginPage() {
           </button>
 
           <p className={styles.registerLink}>
-            Don't have an account?{" "}
+            {"Don't have an account? "}
             <Link href="/register" className={styles.link}>
               Sign Up
             </Link>

@@ -1,0 +1,36 @@
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
+
+.wrap {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  padding: 16px;
+  background: rgba($white-color, 0.88);
+}
+
+.spinner {
+  width: 44px;
+  height: 44px;
+  border: 3px solid $light-grey-color;
+  border-top-color: $dark-grey-color;
+  border-radius: 50%;
+  animation: pageLoaderSpin 0.75s linear infinite;
+}
+
+.text {
+  font-size: $font-size-14;
+  font-weight: $font-weight-medium;
+  color: $gray-color;
+}
+
+@keyframes pageLoaderSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}

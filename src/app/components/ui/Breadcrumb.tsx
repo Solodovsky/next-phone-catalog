@@ -9,6 +9,7 @@ const routeLabels: Record<string, string> = {
   "/accessories": "Accessories",
   "/favorites": "Favorites",
   "/cart": "Cart",
+  "/account": "Account",
 };
 
 const formatSegment = (segment: string) =>
@@ -24,9 +25,8 @@ const Breadcrumb: React.FC = () => {
   if (pathname === "/") return null;
 
   const segments = pathname.split("/").filter(Boolean);
-  let accUrl = "";
   const crumbs = segments.map((segment, idx) => {
-    accUrl += `/${segment}`;
+    const accUrl = `/${segments.slice(0, idx + 1).join("/")}`;
     const isLast = idx === segments.length - 1;
     const label =
       idx === 0

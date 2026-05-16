@@ -21,6 +21,28 @@ type Props = {
   products: Product[];
 };
 
+const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <button
+    type="button"
+    aria-label="Previous slide"
+    onClick={onClick}
+    className={`${styles.sliderButton} ${styles.prevButton}`}
+  >
+    <SliderLeftIcon />
+  </button>
+);
+
+const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
+  <button
+    type="button"
+    aria-label="Next slide"
+    onClick={onClick}
+    className={`${styles.sliderButton} ${styles.nextButton}`}
+  >
+    <SliderRightIcon />
+  </button>
+);
+
 const HomeSlider: React.FC<Props> = ({ title, products }) => {
   const [clientWidth, setClientWidth] = useState(0);
 
@@ -30,28 +52,6 @@ const HomeSlider: React.FC<Props> = ({ title, products }) => {
     window.addEventListener("resize", updateWidth);
     return () => window.removeEventListener("resize", updateWidth);
   }, []);
-
-  const PrevArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
-    <button
-      type="button"
-      aria-label="Previous slide"
-      onClick={onClick}
-      className={`${styles.sliderButton} ${styles.prevButton}`}
-    >
-      <SliderLeftIcon />
-    </button>
-  );
-
-  const NextArrow: React.FC<{ onClick?: () => void }> = ({ onClick }) => (
-    <button
-      type="button"
-      aria-label="Next slide"
-      onClick={onClick}
-      className={`${styles.sliderButton} ${styles.nextButton}`}
-    >
-      <SliderRightIcon />
-    </button>
-  );
 
   const slidesConfig =
     clientWidth > 0

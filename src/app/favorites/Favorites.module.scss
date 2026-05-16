@@ -26,6 +26,11 @@
   color: $gray-color;
 }
 
+.favoritesPagination {
+  width: 100%;
+  margin-bottom: 40px;
+}
+
 .emptyState {
   @include flex-center;
   flex-direction: column;

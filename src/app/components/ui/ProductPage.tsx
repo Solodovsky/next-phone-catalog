@@ -34,12 +34,11 @@ const SORT_OPTIONS = [
 const ITEMS_OPTIONS = [4, 8, 16] as const;
 
 const ProductPage: React.FC<Props> = ({
-  category,
   title,
   emptyMessage,
   initialProducts,
   initialPagination,
-}) => {
+}: Props) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();

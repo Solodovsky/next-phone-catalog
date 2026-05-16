@@ -2,54 +2,100 @@ import { NextRequest, NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
+import { resolveJwtSecret } from "@/lib/jwt-secret";
+import { isPrismaDatabaseUnavailableError } from "@/lib/prisma-env-error";
 
-const JWT_SECRET = process.env.JWT_SECRET as string;
-
-if (!JWT_SECRET) {
-  throw new Error("JWT_SECRET is not set in environment variables");
-}
+const cookieOpts = {
+  httpOnly: true,
+  sameSite: "lax" as const,
+  secure: process.env.NODE_ENV === "production",
+  path: "/",
+  maxAge: 60 * 60,
+};
 
 export async function POST(req: NextRequest) {
-  const { email, password } = await req.json();
-
-  const user = await prisma.user.findUnique({ where: { email } });
-
-  if (!user) {
+  const jwtSecret = resolveJwtSecret();
+  if (!jwtSecret) {
     return NextResponse.json(
       {
-        message: "Incorrect login or password",
+        message:
+          "Set JWT_SECRET in the server environment (see .env.example). Required in production.",
       },
-      { status: 401 }
+      { status: 503 }
     );
   }
 
-  const isValid = await bcrypt.compare(password, user.passwordHash);
+  let body: { email?: unknown; password?: unknown };
+  try {
+    body = await req.json();
+  } catch {
+    return NextResponse.json({ message: "Invalid JSON body" }, { status: 400 });
+  }
 
-  if (!isValid) {
+  const emailRaw = typeof body.email === "string" ? body.email : "";
+  const password = typeof body.password === "string" ? body.password : "";
+  const email = emailRaw.trim().toLowerCase();
+
+  if (!email || !password) {
     return NextResponse.json(
-      { message: "Incorrect login or password" },
-      { status: 401 }
+      { message: "Email and password are required" },
+      { status: 400 }
     );
   }
 
-  const token = jwt.sign({ userId: user.id, email: user.email }, JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  try {
+    const user = await prisma.user.findUnique({ where: { email } });
 
-  const res = NextResponse.json(
-    {
-      message: "Successful login",
-      user: { id: user.id, email: user.email, name: user.name },
-    },
-    { status: 200 }
-  );
+    if (!user) {
+      return NextResponse.json(
+        { message: "Incorrect login or password" },
+        { status: 401 }
+      );
+    }
 
-  res.cookies.set("token", token, {
-    httpOnly: true,
-    sameSite: "lax",
-    secure: process.env.NODE_ENV === "production",
-    maxAge: 60 * 60,
-  });
+    const isValid = await bcrypt.compare(password, user.passwordHash);
 
-  return res;
+    if (!isValid) {
+      return NextResponse.json(
+        { message: "Incorrect login or password" },
+        { status: 401 }
+      );
+    }
+
+    const token = jwt.sign({ userId: user.id, email: user.email }, jwtSecret, {
+      expiresIn: "1h",
+    });
+
+    const res = NextResponse.json(
+      {
+        message: "Successful login",
+        user: { id: user.id, email: user.email, name: user.name },
+      },
+      { status: 200 }
+    );
+
+    res.cookies.set("token", token, cookieOpts);
+
+    return res;
+  } catch (e) {
+    if (isPrismaDatabaseUnavailableError(e)) {
+      return NextResponse.json(
+        {
+          message:
+            "Database is unavailable. Create next-phone-catalog/.env with DATABASE_URL (see .env.example), then run: npx prisma migrate deploy",
+        },
+        { status: 503 }
+      );
+    }
+
+    console.error("[auth/login]", e);
+    const payload: { message: string; debug?: string } = {
+      message:
+        "Login failed. Check the terminal log and DATABASE_URL / migrations.",
+    };
+    if (process.env.NODE_ENV === "development" && e instanceof Error) {
+      payload.debug = e.message;
+    }
+    return NextResponse.json(payload, { status: 500 });
+  }
 }
