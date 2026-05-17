@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "../../../store/hooks/redux";
@@ -15,6 +15,7 @@ import {
 } from "../icons";
 import { MobileMenu } from "./MobileMenu";
 import { useMobileMenu } from "./useMobileMenu";
+import HeaderSearch from "./HeaderSearch";
 import styles from "./Header.module.scss";
 
 const navItems = [
@@ -138,6 +139,10 @@ const Header: React.FC = () => {
             );
           })}
         </nav>
+
+        <Suspense fallback={<div className={styles.searchFallback} aria-hidden />}>
+          <HeaderSearch />
+        </Suspense>
 
         <div className={styles.actions}>
           <div className={styles.desktopIcons}>

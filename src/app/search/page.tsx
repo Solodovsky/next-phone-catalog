@@ -1,6 +1,6 @@
 import { headers } from "next/headers";
-import ProductPage from "../components/ui/ProductPage";
-import { fetchCategoryData } from "@/lib/productsApi";
+import SearchResultsClient from "./SearchResultsClient";
+import { fetchSearchData } from "@/lib/productsApi";
 import type { Product } from "@/lib/types";
 
 async function getBaseUrl() {
@@ -13,7 +13,7 @@ async function getBaseUrl() {
   return `${protocol}://${host}`;
 }
 
-export default async function PhonesPage({
+export default async function SearchPage({
   searchParams,
 }: {
   searchParams: Promise<Record<string, string | string[] | undefined>>;
@@ -21,19 +21,19 @@ export default async function PhonesPage({
   const params = await searchParams;
   const page = (params.page as string) || "1";
   const items = (params.items as string) || "16";
-  const sort = (params.sort as string) || "";
-  const q = typeof params.q === "string" ? params.q : "";
+  const qRaw = typeof params.q === "string" ? params.q : "";
+  const q = qRaw.trim();
 
   const baseUrl = await getBaseUrl();
 
-  const queryParams: Record<string, string> = { page, items };
-  if (sort) queryParams.sort = sort;
-  if (q.trim()) queryParams.q = q.trim();
+  const query: Record<string, string> = { page, items };
+  if (q) {
+    query.q = q;
+  }
 
-  const { data: products, pagination } = await fetchCategoryData(
+  const { data: products, pagination } = await fetchSearchData(
     baseUrl,
-    "phones",
-    queryParams
+    query,
   );
 
   const defaultPagination = {
@@ -43,13 +43,15 @@ export default async function PhonesPage({
     totalPages: 0,
   };
 
+  const p = pagination || defaultPagination;
+
   return (
-    <ProductPage
-      category="phones"
-      title="Mobile phones"
-      emptyMessage="There are not phones yet"
-      initialProducts={(products || []) as Product[]}
-      initialPagination={pagination || defaultPagination}
-    />
+    <div className="page container">
+      <SearchResultsClient
+        products={(products || []) as Product[]}
+        pagination={p}
+        qRaw={qRaw}
+      />
+    </div>
   );
 }

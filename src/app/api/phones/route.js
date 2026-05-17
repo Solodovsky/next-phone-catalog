@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import phones from "../../../../data/phones.json";
+import { nameMatchesQuery } from "@/lib/searchMatch";
 
 export async function GET(request) {
   try {
@@ -39,6 +40,11 @@ export async function GET(request) {
 
         return discountB - discountA;
       });
+    }
+
+    const q = searchParams.get("q")?.trim().toLowerCase();
+    if (q) {
+      result = result.filter((phone) => nameMatchesQuery(phone.name, q));
     }
 
     if (sort) {

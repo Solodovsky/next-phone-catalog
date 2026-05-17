@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import accessories from "../../../../data/accessories.json";
+import { nameMatchesQuery } from "@/lib/searchMatch";
 
 export async function GET(request) {
   try {
@@ -9,6 +10,11 @@ export async function GET(request) {
     const items = Number(searchParams.get("items") || "16");
 
     let result = [...accessories];
+
+    const q = searchParams.get("q")?.trim().toLowerCase();
+    if (q) {
+      result = result.filter((item) => nameMatchesQuery(item.name, q));
+    }
 
     if (sort) {
       switch (sort) {

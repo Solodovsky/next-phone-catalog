@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import { ButtonCard } from "./ButtonCard";
 import { FavoriteIcon } from "../../components/icons";

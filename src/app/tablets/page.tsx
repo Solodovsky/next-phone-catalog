@@ -22,11 +22,13 @@ export default async function TabletsPage({
   const page = (params.page as string) || "1";
   const items = (params.items as string) || "16";
   const sort = (params.sort as string) || "";
+  const q = typeof params.q === "string" ? params.q : "";
 
   const baseUrl = await getBaseUrl();
 
   const queryParams: Record<string, string> = { page, items };
   if (sort) queryParams.sort = sort;
+  if (q.trim()) queryParams.q = q.trim();
 
   const { data: products, pagination } = await fetchCategoryData(
     baseUrl,

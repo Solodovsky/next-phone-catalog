@@ -5,6 +5,7 @@ export { CloseIcon } from './CloseIcon';
 export { LogoIcon } from './LogoIcon';
 export { ArrowIcon } from './ArrowIcon';
 export { UserIcon } from './UserIcon';
+export { SearchIcon } from './SearchIcon';
 export { default as PlusIcon } from './PlusIcon';
 export { default as MinuseIcon } from './MinuseIcon';
 export { default as SliderLeftIcon } from './SliderLefticon';
