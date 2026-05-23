@@ -1,19 +1,22 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { Provider, useDispatch } from "react-redux";
 import { store } from "@/store/store";
 import { rehydrateCart } from "@/store/slices/cartSlice";
 import { rehydrateFavorites } from "@/store/slices/favoritesSlice";
 import { setUser } from "@/store/slices/authSlice";
+import { StoreHydrationContext } from "@/store/context/StoreHydrationContext";
 
 function StoreHydrator({ children }: { children: React.ReactNode }) {
   const dispatch = useDispatch();
+  const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
     dispatch(rehydrateCart());
     dispatch(rehydrateFavorites());
-    
+    setHydrated(true);
+
     const checkAuth = async () => {
       try {
         const res = await fetch("/api/auth/me", { credentials: "include" });
@@ -35,7 +38,11 @@ function StoreHydrator({ children }: { children: React.ReactNode }) {
     checkAuth();
   }, [dispatch]);
 
-  return <>{children}</>;
+  return (
+    <StoreHydrationContext.Provider value={hydrated}>
+      {children}
+    </StoreHydrationContext.Provider>
+  );
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {

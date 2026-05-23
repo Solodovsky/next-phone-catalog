@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ButtonCard } from "./ButtonCard";
 import { FavoriteIcon } from "../../components/icons";
 import { useAppDispatch, useAppSelector } from "../../../store/hooks/redux";
+import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
 import { addToCart, removeFromCart } from "../../../store/slices/cartSlice";
 import type { RootState } from "../../../store/store";
 
@@ -19,14 +20,17 @@ type Props = {
 
 export const ProductCard: React.FC<Props> = ({ product, priority }) => {
   const dispatch = useAppDispatch();
+  const hydrated = useStoreHydrated();
   const cartItems = useAppSelector((state) => state.cart?.items || []);
   const favorites = useAppSelector((state: RootState) => state.favorites);
 
   const path = `/${product.images[0]}`;
   const detailsPath = `/${product.category}/${product.id}`;
 
-  const isInCart = cartItems.some((item) => item.id === product.id);
-  const isInFavorites = favorites.some((fav: Product) => fav.id === product.id);
+  const isInCart =
+    hydrated && cartItems.some((item) => item.id === product.id);
+  const isInFavorites =
+    hydrated && favorites.some((fav: Product) => fav.id === product.id);
 
   const handleAddToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
@@ -65,7 +69,7 @@ export const ProductCard: React.FC<Props> = ({ product, priority }) => {
           />
         </figure>
 
-        <header className={styles.header}>
+        <div className={styles.header}>
           <h3 className={styles.name}>{product.name}</h3>
           <p className={styles.price}>
             {product.isNew ? (
@@ -88,7 +92,7 @@ export const ProductCard: React.FC<Props> = ({ product, priority }) => {
               </strong>
             )}
           </p>
-        </header>
+        </div>
 
         <div className={styles.specs}>
           <div className={styles.spec}>
@@ -108,7 +112,7 @@ export const ProductCard: React.FC<Props> = ({ product, priority }) => {
         </div>
       </Link>
 
-      <footer className={styles.actions}>
+      <div className={styles.actions}>
         <ButtonCard
           onClick={handleAddToCart}
           label={isInCart ? "Selected" : "Add to cart"}
@@ -133,7 +137,7 @@ export const ProductCard: React.FC<Props> = ({ product, priority }) => {
             isActive={isInFavorites}
           />
         </button>
-      </footer>
+      </div>
     </article>
   );
 };

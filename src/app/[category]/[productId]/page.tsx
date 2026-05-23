@@ -12,6 +12,7 @@ import productsApi from "@/lib/productsApi";
 import type { Category } from "@/lib/types";
 import type { Product } from "@/lib/types";
 import { useAppDispatch, useAppSelector } from "@/store/hooks/redux";
+import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
 import type { RootState } from "@/store/store";
 import { addToCart, removeFromCart } from "@/store/slices/cartSlice";
 import { toggleFavorite } from "@/store/slices/favoritesSlice";
@@ -82,18 +83,22 @@ const Details = () => {
   const [product, setProduct] = useState<Product | null>(null);
   const [products, setProducts] = useState<Product[]>([]);
   const [selectCapacity, setSelectCapacity] = useState<string>("");
+  const [selectColor, setSelectColor] = useState(AVAILABLE_COLORS[0].id);
 
   const dispatch = useAppDispatch();
+  const hydrated = useStoreHydrated();
   const cartItems = useAppSelector((state) => state.cart?.items || []);
   const favorites = useAppSelector((state: RootState) => state.favorites);
 
-  const isInCart = product
-    ? cartItems.some((item) => item.id === product.id)
-    : false;
+  const isInCart =
+    hydrated && product
+      ? cartItems.some((item) => item.id === product.id)
+      : false;
 
-  const isInFavorites = product
-    ? favorites.some((item: Product) => item.id === product.id)
-    : false;
+  const isInFavorites =
+    hydrated && product
+      ? favorites.some((item: Product) => item.id === product.id)
+      : false;
 
   const handleAddToCart = () => {
     if (!product) return;
@@ -199,7 +204,16 @@ const Details = () => {
             <p className={styles.title}>Available colors</p>
             <div className={styles.colorsList}>
               {AVAILABLE_COLORS.map((color) => (
-                <button key={color.id} className={styles.colorButton}>
+                <button
+                  key={color.id}
+                  type="button"
+                  onClick={() => setSelectColor(color.id)}
+                  className={`${styles.colorButton} ${
+                    color.id === selectColor ? styles.colorButtonActive : ""
+                  }`}
+                  aria-label={`Color: ${color.color}`}
+                  aria-pressed={color.id === selectColor}
+                >
                   <Image
                     src={color.image}
                     alt={color.color}

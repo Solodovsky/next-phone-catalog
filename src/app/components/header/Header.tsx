@@ -4,6 +4,7 @@ import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAppSelector } from "../../../store/hooks/redux";
+import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
 import type { RootState } from "../../../store/store";
 import {
   FavoriteIcon,
@@ -40,6 +41,7 @@ const Header: React.FC = () => {
     };
   }, [isMenuOpen]);
 
+  const hydrated = useStoreHydrated();
   const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
   const favoritesCount = useAppSelector(
     (state: RootState) => state.favorites?.length || 0,
@@ -48,6 +50,10 @@ const Header: React.FC = () => {
     (state) => state.auth?.isAuthenticated || false,
   );
   const user = useAppSelector((state) => state.auth?.user);
+
+  const displayCartCount = hydrated ? cartItemsCount : 0;
+  const displayFavoritesCount = hydrated ? favoritesCount : 0;
+  const displayAuthenticated = hydrated && isAuthenticated;
 
   const renderFavoritesLink = (extraClass = "", onNavigate?: () => void) => (
     <Link
@@ -59,8 +65,8 @@ const Header: React.FC = () => {
       onClick={onNavigate}
     >
       <FavoriteIcon className={styles.icon} width={40} height={40} />
-      {favoritesCount > 0 && (
-        <span className={styles.badge}>{favoritesCount}</span>
+      {displayFavoritesCount > 0 && (
+        <span className={styles.badge}>{displayFavoritesCount}</span>
       )}
     </Link>
   );
@@ -75,14 +81,14 @@ const Header: React.FC = () => {
       onClick={onNavigate}
     >
       <CartIcon className={styles.icon} />
-      {cartItemsCount > 0 && (
-        <span className={styles.badge}>{cartItemsCount}</span>
+      {displayCartCount > 0 && (
+        <span className={styles.badge}>{displayCartCount}</span>
       )}
     </Link>
   );
 
   const renderAuthLink = (extraClass = "", onNavigate?: () => void) => {
-    if (isAuthenticated) {
+    if (displayAuthenticated) {
       return (
         <Link
           href="/account"

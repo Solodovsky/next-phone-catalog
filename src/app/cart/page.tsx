@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
+import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
 import { removeFromCart, updateQuantity } from "@/store/slices/cartSlice";
 import styles from "./Cart.module.scss";
 import Breadcrumb from "../components/ui/Breadcrumb";
@@ -15,7 +16,10 @@ const ITEMS_PER_PAGE = 4;
 
 const Cart: React.FC = () => {
   const dispatch = useAppDispatch();
+  const hydrated = useStoreHydrated();
   const { items, totalCount } = useAppSelector((state) => state.cart);
+  const cartItems = hydrated ? items : [];
+  const cartTotalCount = hydrated ? totalCount : 0;
   const router = useRouter();
   const [page, setPage] = useState(1);
   const isAuth = useAppSelector(
@@ -29,7 +33,7 @@ const Cart: React.FC = () => {
     }
   };
 
-  const totalPrice = items.reduce(
+  const totalPrice = cartItems.reduce(
     (total, item) => total + item.price * item.quantity,
     0
   );
@@ -46,18 +50,18 @@ const Cart: React.FC = () => {
     }
   };
 
-  const totalPages = Math.max(1, Math.ceil(items.length / ITEMS_PER_PAGE));
+  const totalPages = Math.max(1, Math.ceil(cartItems.length / ITEMS_PER_PAGE));
   const effectivePage = Math.min(page, totalPages);
   const sliceStart = (effectivePage - 1) * ITEMS_PER_PAGE;
-  const visibleItems = items.slice(sliceStart, sliceStart + ITEMS_PER_PAGE);
+  const visibleItems = cartItems.slice(sliceStart, sliceStart + ITEMS_PER_PAGE);
 
-  if (totalCount === 0) {
+  if (cartTotalCount === 0) {
     return (
       <section className={`page container ${styles.cartPage}`}>
         <Breadcrumb />
         <h2 className={styles.title}>Cart</h2>
         <div className={styles.emptyCart}>
-          <p className={styles.emptyCartText}>There are not products</p>
+          <p className={styles.emptyCartText}>There aren&apos;t products</p>
         </div>
       </section>
     );
@@ -113,12 +117,12 @@ const Cart: React.FC = () => {
         </div>
         <div className={styles.total}>
           <h3 className={styles.totalPrice}>${totalPrice}</h3>
-          <p className={styles.totalText}>Total for {totalCount} items</p>
+          <p className={styles.totalText}>Total for {cartTotalCount} items</p>
           <ButtonCard onClick={handlePayClick} label="Pay" />
         </div>
         <div className={styles.cartPagination}>
           <Pagination
-            totalItems={items.length}
+            totalItems={cartItems.length}
             items={ITEMS_PER_PAGE}
             currentPage={effectivePage}
             onPageChange={setPage}
