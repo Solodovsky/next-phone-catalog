@@ -1,5 +1,3 @@
-# next-phone-catalog
-
 ## Getting started
 
 ```bash
@@ -8,11 +6,6 @@ cp .env.example .env
 # set DATABASE_URL and JWT_SECRET in .env
 npx prisma migrate deploy
 npm run dev
-```
-
-App: [http://localhost:3000](http://localhost:3000)
-
-```bash
 npm run build    # production build
 npm run start    # production server
 ```
