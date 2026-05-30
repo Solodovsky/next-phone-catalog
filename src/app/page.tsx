@@ -1,12 +1,10 @@
-import React from "react";
+import { Suspense } from "react";
 import HomeBannerSlider, {
   HomeBannerSlide,
-} from "./components/home/HomeBannerSlider";
-import HomeSlider from "./components/home/HomeSlider";
-import ShopByCategory from "./components/home/ShopByCategory";
-import type { Product } from "@/lib/types";
-import styles from "./Home.module.scss";
-import { headers } from "next/headers";
+} from "@/components/home/HomeBannerSlider";
+import HomeCatalogSliders from "@/features/home/HomeCatalogSliders";
+import PageLoader from "@/components/ui/PageLoader";
+import styles from "@/features/home/Home.module.scss";
 
 const slides: HomeBannerSlide[] = [
   {
@@ -27,40 +25,14 @@ const slides: HomeBannerSlide[] = [
   },
 ];
 
-async function fetchPhones(baseUrl: string, params: Record<string, string>) {
-  const search = new URLSearchParams(params).toString();
-  const res = await fetch(`${baseUrl}/api/phones?${search}`, {
-    next: { revalidate: 60 },
-  });
-
-  if (!res.ok) return { data: [] };
-  const json = await res.json();
-
-  return json;
-}
-
-export default async function Home() {
-  const headersList = await headers();
-  const host = headersList.get("host") || "localhost:3000";
-  const protocol = headersList.get("x-forwarded-proto") || "http";
-  const baseUrl =
-    process.env.NEXT_PUBLIC_APP_URL ||
-    (host ? `${protocol}://${host}` : "http://localhost:3000");
-
-  const [newModelsRes, hotPricesRes] = await Promise.all([
-    fetchPhones(baseUrl, { model: "iphone-14" }),
-    fetchPhones(baseUrl, { hotPrices: "price" }),
-  ]);
-
-  const newModels: Product[] = newModelsRes.data || [];
-  const hotPrices: Product[] = (hotPricesRes.data || []).slice(0, 18);
+export default function Home() {
   return (
     <div className="page container">
       <h2 className={styles.homeTitle}>Welcome to Nice Gadgets store!</h2>
       <HomeBannerSlider slides={slides} />
-      <HomeSlider products={newModels} title="Brand new models" />
-      <ShopByCategory />
-      <HomeSlider products={hotPrices} title="Hot prices" />
+      <Suspense fallback={<PageLoader />}>
+        <HomeCatalogSliders />
+      </Suspense>
     </div>
   );
 }

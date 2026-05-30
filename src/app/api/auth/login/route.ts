@@ -4,6 +4,7 @@ import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 import { resolveJwtSecret } from "@/lib/jwt-secret";
 import { isPrismaDatabaseUnavailableError } from "@/lib/prisma-env-error";
+import { checkAuthRateLimit } from "@/lib/rate-limit";
 
 const cookieOpts = {
   httpOnly: true,
@@ -14,6 +15,17 @@ const cookieOpts = {
 };
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkAuthRateLimit("login", req);
+  if (!rateLimit.ok) {
+    return NextResponse.json(
+      { message: "Too many requests. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rateLimit.retryAfterSec) },
+      },
+    );
+  }
+
   const jwtSecret = resolveJwtSecret();
   if (!jwtSecret) {
     return NextResponse.json(

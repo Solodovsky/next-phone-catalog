@@ -3,28 +3,28 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
 import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
-import { removeFromCart, updateQuantity } from "@/store/slices/cartSlice";
+import { useAuthStore } from "@/store/client/auth-store";
+import { useCartStore } from "@/store/client/cart-store";
 import styles from "./Cart.module.scss";
-import Breadcrumb from "../components/ui/Breadcrumb";
-import { CloseIcon, MinuseIcon, PlusIcon } from "../components/icons";
-import ButtonCard from "../components/ui/ButtonCard";
-import Pagination from "../components/ui/Pagination";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import { CloseIcon, MinuseIcon, PlusIcon } from "@/components/icons";
+import ButtonCard from "@/components/ui/ButtonCard";
+import Pagination from "@/components/ui/Pagination";
 
 const ITEMS_PER_PAGE = 4;
 
 const Cart: React.FC = () => {
-  const dispatch = useAppDispatch();
   const hydrated = useStoreHydrated();
-  const { items, totalCount } = useAppSelector((state) => state.cart);
+  const items = useCartStore((state) => state.items);
+  const totalCount = useCartStore((state) => state.totalCount);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const updateQuantity = useCartStore((state) => state.updateQuantity);
   const cartItems = hydrated ? items : [];
   const cartTotalCount = hydrated ? totalCount : 0;
   const router = useRouter();
   const [page, setPage] = useState(1);
-  const isAuth = useAppSelector(
-    (state) => state.auth?.isAuthenticated ?? false
-  );
+  const isAuth = useAuthStore((state) => state.isAuthenticated);
 
   const handlePayClick = () => {
     if (!isAuth) {
@@ -39,14 +39,14 @@ const Cart: React.FC = () => {
   );
 
   const handleRemoveItem = (id: string) => {
-    dispatch(removeFromCart(id));
+    removeFromCart(id);
   };
 
   const handleQuantityChange = (id: string, quantity: number) => {
     if (quantity > 0) {
-      dispatch(updateQuantity({ id, quantity }));
+      updateQuantity(id, quantity);
     } else {
-      dispatch(removeFromCart(id));
+      removeFromCart(id);
     }
   };
 

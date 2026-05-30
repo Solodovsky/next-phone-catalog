@@ -3,15 +3,15 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppSelector, useAppDispatch } from "@/store/hooks/redux";
-import { logout, setUser } from "@/store/slices/authSlice";
-import Breadcrumb from "../components/ui/Breadcrumb";
+import { useAuthStore } from "@/store/client/auth-store";
+import Breadcrumb from "@/components/ui/Breadcrumb";
 import styles from "./Account.module.scss";
 
 export default function AccountPage() {
   const router = useRouter();
-  const dispatch = useAppDispatch();
-  const user = useAppSelector((state) => state.auth?.user);
+  const user = useAuthStore((state) => state.user);
+  const setUser = useAuthStore((state) => state.setUser);
+  const logout = useAuthStore((state) => state.logout);
   const [sessionState, setSessionState] = useState<"pending" | "ok">("pending");
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export default function AccountPage() {
       } catch {}
       if (cancelled) return;
       if (data.user) {
-        dispatch(setUser(data.user));
+        setUser(data.user);
         setSessionState("ok");
       } else {
         router.replace("/login");
@@ -34,11 +34,11 @@ export default function AccountPage() {
     return () => {
       cancelled = true;
     };
-  }, [dispatch, router]);
+  }, [setUser, router]);
 
   const handleLogout = async () => {
     await fetch("/api/auth/logout", { method: "POST", credentials: "include" });
-    dispatch(logout());
+    logout();
     router.push("/");
   };
 

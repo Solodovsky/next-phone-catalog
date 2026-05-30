@@ -151,15 +151,3 @@
   transition: all 0.3s ease;
   display: block;
 }
-
-.loading,
-.error {
-  @include flex-center;
-  padding: 40px;
-  text-align: center;
-  color: $gray-color;
-}
-
-.error {
-  color: #dc3545;
-}

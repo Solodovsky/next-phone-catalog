@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import "./styles/globals.scss";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
-import { Providers } from "./components/Provider";
+import "@/styles/globals.scss";
+import Header from "@/components/header/Header";
+import Footer from "@/components/footer/Footer";
+import { AppProviders } from "@/providers/AppProviders";
 
 const mont = localFont({
   src: [
@@ -29,13 +29,13 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={mont.variable}>
-        <Providers>
+        <AppProviders>
           <div className="App">
             <Header />
             <main>{children}</main>
             <Footer />
           </div>
-        </Providers>
+        </AppProviders>
       </body>
     </html>
   );

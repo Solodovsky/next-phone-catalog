@@ -1,8 +1,14 @@
-@use './styles/variables' as *;
-@use './styles/mixins' as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .page {
   overflow-x: hidden;
+}
+
+.homeError {
+  margin: 24px 0;
+  color: $gray-color;
+  font-size: $font-size-14;
 }
 
 .homeTitle {

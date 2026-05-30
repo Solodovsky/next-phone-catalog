@@ -1,28 +1,23 @@
-'use client';
+"use client";
 
 import React from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import Breadcrumb from "./Breadcrumb";
-import Pagination from "./Pagination";
-import ProductList from "./ProductList";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import Pagination from "@/components/ui/Pagination";
+import ProductList from "@/components/ui/ProductList";
+import PageLoader from "@/components/ui/PageLoader";
 import { Product } from "@/lib/types";
+import {
+  type CategorySlug,
+  type PaginationInfo,
+} from "@/lib/catalog-api";
+import { useCategoryProductsQuery } from "@/hooks/use-catalog-queries";
 import styles from "./ProductPage.module.scss";
 
-type Category = "phones" | "tablets" | "accessories";
-
-type PaginationInfo = {
-  total: number;
-  page: number;
-  items: number;
-  totalPages: number;
-};
-
 type Props = {
-  category: Category;
+  category: CategorySlug;
   title: string;
   emptyMessage: string;
-  initialProducts: Product[];
-  initialPagination: PaginationInfo;
 };
 
 const SORT_OPTIONS = [
@@ -33,12 +28,14 @@ const SORT_OPTIONS = [
 
 const ITEMS_OPTIONS = [4, 8, 16] as const;
 
-const ProductPage: React.FC<Props> = ({
-  title,
-  emptyMessage,
-  initialProducts,
-  initialPagination,
-}: Props) => {
+const EMPTY_PAGINATION: PaginationInfo = {
+  total: 0,
+  page: 1,
+  items: 16,
+  totalPages: 0,
+};
+
+const ProductPage: React.FC<Props> = ({ category, title, emptyMessage }) => {
   const searchParams = useSearchParams();
   const router = useRouter();
   const pathname = usePathname();
@@ -46,8 +43,20 @@ const ProductPage: React.FC<Props> = ({
   const page = Number(searchParams.get("page")) || 1;
   const items = Number(searchParams.get("items")) || 16;
   const sort = searchParams.get("sort") || "";
-  const products = initialProducts;
-  const totalItems = initialPagination.total;
+  const q = searchParams.get("q")?.trim() || "";
+
+  const { data, isLoading, isFetching, isError } = useCategoryProductsQuery({
+    category,
+    page,
+    items,
+    sort: sort || undefined,
+    q: q || undefined,
+  });
+
+  const products: Product[] = data?.data ?? [];
+  const pagination = data?.pagination ?? EMPTY_PAGINATION;
+  const totalItems = pagination.total;
+  const showLoader = isLoading || (isFetching && products.length === 0);
 
   const updateParams = (updates: Record<string, string | number | null>) => {
     const params = new URLSearchParams(searchParams.toString());
@@ -120,18 +129,25 @@ const ProductPage: React.FC<Props> = ({
           </select>
         </div>
       </div>
-      {products.length === 0 ? (
+
+      {showLoader ? (
+        <PageLoader />
+      ) : isError ? (
+        <div className={styles.emptyMessage}>Failed to load products</div>
+      ) : products.length === 0 ? (
         <div className={styles.emptyMessage}>{emptyMessage}</div>
       ) : (
         <ProductList products={products} />
       )}
 
-      <Pagination
-        totalItems={totalItems}
-        items={items}
-        currentPage={page}
-        onPageChange={handlePageChange}
-      />
+      {!showLoader && !isError && totalItems > 0 && (
+        <Pagination
+          totalItems={totalItems}
+          items={items}
+          currentPage={page}
+          onPageChange={handlePageChange}
+        />
+      )}
     </div>
   );
 };

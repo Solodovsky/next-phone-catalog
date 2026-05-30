@@ -54,7 +54,7 @@ export async function GET(request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error fetching accessories", error: String(error) },
+      { message: "Error fetching accessories" },
       { status: 500 }
     );
   }

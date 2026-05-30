@@ -1,5 +1,5 @@
 import React from "react";
-import { Product } from "../../../lib/types";
+import { Product } from "@/lib/types";
 import styles from "./ProductList.module.scss";
 import { ProductCard } from "./ProductCard";
 

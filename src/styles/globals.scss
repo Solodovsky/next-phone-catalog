@@ -1,0 +1,50 @@
+@use "variables" as *;
+@use "mixins" as *;
+@use "reset";
+
+@forward "variables";
+@forward "mixins";
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-mont), sans-serif;
+}
+
+.page {
+  min-height: 100vh;
+
+  h2 {
+    font-size: 22px;
+    font-weight: $font-weight-bold;
+    color: $dark-grey-color;
+
+    @include tablet {
+      font-size: 32px;
+    }
+
+    @include desktop {
+      font-size: 32px;
+    }
+  }
+}
+
+.container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 16px;
+
+  @include tablet {
+    padding: 0 24px;
+  }
+
+  @include desktop {
+    padding: 0 32px;
+    max-width: 1200px;
+  }
+}
+
+.App {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}

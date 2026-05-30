@@ -1,5 +1,5 @@
-@use "../styles/variables" as *;
-@use "../styles/mixins" as *;
+@use "../../styles/variables" as *;
+@use "../../styles/mixins" as *;
 
 .accountPage {
   display: flex;
@@ -23,12 +23,6 @@
   @include tablet {
     font-size: 32px;
   }
-}
-
-.subtitle {
-  margin: 0;
-  font-size: $font-size-14;
-  color: $gray-color;
 }
 
 .grid {
@@ -168,18 +162,3 @@
   font-size: $font-size-14;
 }
 
-.loginLink {
-  display: inline-block;
-  margin-top: 16px;
-  padding: 12px 32px;
-  border-radius: 48px;
-  background: $dark-grey-color;
-  color: $white-color;
-  text-decoration: none;
-  font-weight: $font-weight-medium;
-  transition: background 0.2s ease;
-
-  &:hover {
-    background: darken($dark-grey-color, 5%);
-  }
-}

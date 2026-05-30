@@ -75,18 +75,3 @@ export type Accessory = {
 };
 
 export type Product = Phone | Tablet | Accessory;
-
-export type Category = "products" | "tablets" | "phones" | "accessories";
-export type QueryParams = {
-  [key: string]: string | number;
-};
-
-export type PaginationResponse<T> = {
-  data: T[];
-  pagination?: {
-    total: number;
-    page: number;
-    perPage: number;
-    totalPages: number;
-  };
-};

@@ -33,8 +33,7 @@
     "src/app/api/tablets/route.js",
     "src/app/api/phones/[id]/route.js",
     "src/app/api/phones/route.js",
-    "src/app/api/products/route.js",
-    "src/app/api/products/[id]/route.js"
+    "src/app/api/search/route.js"
   ],
   "exclude": ["node_modules"]
 }

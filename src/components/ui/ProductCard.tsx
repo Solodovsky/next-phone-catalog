@@ -2,15 +2,13 @@
 
 import Image from "next/image";
 import { ButtonCard } from "./ButtonCard";
-import { FavoriteIcon } from "../../components/icons";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks/redux";
+import { FavoriteIcon } from "@/components/icons";
 import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
-import { addToCart, removeFromCart } from "../../../store/slices/cartSlice";
-import type { RootState } from "../../../store/store";
+import { useCartStore } from "@/store/client/cart-store";
+import { useFavoritesStore } from "@/store/client/favorites-store";
 
 import styles from "./ProductCard.module.scss";
-import { Product } from "../../../lib/types";
-import { toggleFavorite } from "../../../store/slices/favoritesSlice";
+import { Product } from "@/lib/types";
 import Link from "next/link";
 
 type Props = {
@@ -19,10 +17,12 @@ type Props = {
 };
 
 export const ProductCard: React.FC<Props> = ({ product, priority }) => {
-  const dispatch = useAppDispatch();
   const hydrated = useStoreHydrated();
-  const cartItems = useAppSelector((state) => state.cart?.items || []);
-  const favorites = useAppSelector((state: RootState) => state.favorites);
+  const cartItems = useCartStore((state) => state.items);
+  const favorites = useFavoritesStore((state) => state.favorites);
+  const addToCart = useCartStore((state) => state.addToCart);
+  const removeFromCart = useCartStore((state) => state.removeFromCart);
+  const toggleFavorite = useFavoritesStore((state) => state.toggleFavorite);
 
   const path = `/${product.images[0]}`;
   const detailsPath = `/${product.category}/${product.id}`;
@@ -30,29 +30,27 @@ export const ProductCard: React.FC<Props> = ({ product, priority }) => {
   const isInCart =
     hydrated && cartItems.some((item) => item.id === product.id);
   const isInFavorites =
-    hydrated && favorites.some((fav: Product) => fav.id === product.id);
+    hydrated && favorites.some((fav) => fav.id === product.id);
 
   const handleAddToCart = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
     if (isInCart) {
-      dispatch(removeFromCart(product.id));
+      removeFromCart(product.id);
     } else {
-      dispatch(
-        addToCart({
-          id: product.id,
-          name: product.name,
-          image: product.images[0],
-          price: product.priceDiscount || product.priceRegular,
-        }),
-      );
+      addToCart({
+        id: product.id,
+        name: product.name,
+        image: product.images[0],
+        price: product.priceDiscount || product.priceRegular,
+      });
     }
   };
 
   const handleToggleFavorite = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     event.stopPropagation();
-    dispatch(toggleFavorite(product));
+    toggleFavorite(product);
   };
 
   return (

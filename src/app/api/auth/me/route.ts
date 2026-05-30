@@ -14,7 +14,9 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    const payload = jwt.verify(token, jwtSecret) as {
+    const payload = jwt.verify(token, jwtSecret, {
+      algorithms: ["HS256"],
+    }) as {
       userId: string;
       email: string;
     };

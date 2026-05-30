@@ -3,8 +3,20 @@ import { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/prisma";
 import bcrypt from "bcryptjs";
 import { isPrismaDatabaseUnavailableError } from "@/lib/prisma-env-error";
+import { checkAuthRateLimit } from "@/lib/rate-limit";
 
 export async function POST(req: NextRequest) {
+  const rateLimit = checkAuthRateLimit("register", req);
+  if (!rateLimit.ok) {
+    return NextResponse.json(
+      { message: "Too many requests. Try again later." },
+      {
+        status: 429,
+        headers: { "Retry-After": String(rateLimit.retryAfterSec) },
+      },
+    );
+  }
+
   try {
     let body: { email?: string; password?: string; name?: string };
     try {

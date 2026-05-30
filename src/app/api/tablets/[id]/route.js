@@ -17,7 +17,7 @@ export async function GET(_request, { params }) {
     return NextResponse.json(tablet);
   } catch (error) {
     return NextResponse.json(
-      { message: "Error fetching products", error: String(error) },
+      { message: "Error fetching products" },
       { status: 500 }
     );
   }

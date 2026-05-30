@@ -3,9 +3,10 @@
 import React, { Suspense, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useAppSelector } from "../../../store/hooks/redux";
 import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
-import type { RootState } from "../../../store/store";
+import { useAuthStore } from "@/store/client/auth-store";
+import { useCartStore } from "@/store/client/cart-store";
+import { useFavoritesStore } from "@/store/client/favorites-store";
 import {
   FavoriteIcon,
   CartIcon,
@@ -42,14 +43,10 @@ const Header: React.FC = () => {
   }, [isMenuOpen]);
 
   const hydrated = useStoreHydrated();
-  const cartItemsCount = useAppSelector((state) => state.cart?.totalCount || 0);
-  const favoritesCount = useAppSelector(
-    (state: RootState) => state.favorites?.length || 0,
-  );
-  const isAuthenticated = useAppSelector(
-    (state) => state.auth?.isAuthenticated || false,
-  );
-  const user = useAppSelector((state) => state.auth?.user);
+  const cartItemsCount = useCartStore((state) => state.totalCount);
+  const favoritesCount = useFavoritesStore((state) => state.favorites.length);
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const user = useAuthStore((state) => state.user);
 
   const displayCartCount = hydrated ? cartItemsCount : 0;
   const displayFavoritesCount = hydrated ? favoritesCount : 0;

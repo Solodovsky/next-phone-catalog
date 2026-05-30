@@ -1,18 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { useAppSelector } from "@/store/hooks/redux";
+import { useFavoritesStore } from "@/store/client/favorites-store";
 import { useStoreHydrated } from "@/store/context/StoreHydrationContext";
-import ProductList from "../components/ui/ProductList";
+import ProductList from "@/components/ui/ProductList";
 import styles from "./Favorites.module.scss";
-import Breadcrumb from "../components/ui/Breadcrumb";
-import Pagination from "../components/ui/Pagination";
+import Breadcrumb from "@/components/ui/Breadcrumb";
+import Pagination from "@/components/ui/Pagination";
 
 const ITEMS_PER_PAGE = 4;
 
 const Favorites: React.FC = () => {
   const hydrated = useStoreHydrated();
-  const favoriteProducts = useAppSelector((state) => state.favorites);
+  const favoriteProducts = useFavoritesStore((state) => state.favorites);
   const visibleFavoriteProducts = hydrated ? favoriteProducts : [];
   const [page, setPage] = useState(1);
   const totalPages = Math.max(

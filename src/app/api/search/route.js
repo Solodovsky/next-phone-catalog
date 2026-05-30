@@ -38,7 +38,7 @@ export async function GET(request) {
     });
   } catch (error) {
     return NextResponse.json(
-      { message: "Error searching", error: String(error) },
+      { message: "Error searching" },
       { status: 500 },
     );
   }
